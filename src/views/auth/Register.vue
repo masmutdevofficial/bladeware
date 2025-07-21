@@ -552,7 +552,7 @@ export default {
 
       try {
         const response = await axios.post(
-          "https://bladeware.zshot-ai.com/api/register",
+          "https://bladeware.masmutdev.id/api/register",
           {
             username: username.value,
             phone_email: phoneEmail.value,

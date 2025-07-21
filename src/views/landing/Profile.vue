@@ -714,7 +714,7 @@ const getProfileData = async () => {
     if (!jwtToken) throw new Error("No token found");
 
     const { data } = await axios.get(
-      "https://bladeware.zshot-ai.com/api/get-profile-data",
+      "https://bladeware.masmutdev.id/api/get-profile-data",
       {
         headers: { Authorization: jwtToken },
       }
@@ -736,7 +736,7 @@ const getBindWalletData = async () => {
   try {
     const jwtToken = localStorage.getItem("jwt_token");
     const { data } = await axios.get(
-      "https://bladeware.zshot-ai.com/api/get-bind-wallet",
+      "https://bladeware.masmutdev.id/api/get-bind-wallet",
       {
         headers: { Authorization: `${jwtToken}` },
       }
@@ -783,7 +783,7 @@ const bindWallet = async () => {
     };
 
     const { data } = await axios.post(
-      "https://bladeware.zshot-ai.com/api/bind-wallet",
+      "https://bladeware.masmutdev.id/api/bind-wallet",
       formData,
       {
         headers: {
@@ -829,7 +829,7 @@ const requestWithdrawal = async () => {
     };
 
     const { data } = await axios.post(
-      "https://bladeware.zshot-ai.com/api/request-withdrawal",
+      "https://bladeware.masmutdev.id/api/request-withdrawal",
       formData,
       {
         headers: {
@@ -877,7 +877,7 @@ const updateLoginPassword = async () => {
     };
 
     const { data } = await axios.post(
-      "https://bladeware.zshot-ai.com/api/change-login-password",
+      "https://bladeware.masmutdev.id/api/change-login-password",
       formData,
       {
         headers: {
@@ -921,7 +921,7 @@ const updateWithdrawalPassword = async () => {
     };
 
     const { data } = await axios.post(
-      "https://bladeware.zshot-ai.com/api/change-withdrawal-password",
+      "https://bladeware.masmutdev.id/api/change-withdrawal-password",
       formData,
       {
         headers: {

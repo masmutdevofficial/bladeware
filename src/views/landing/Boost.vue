@@ -182,7 +182,7 @@
               <img
                 :src="
                   produkData.product_image
-                    ? 'https://bladeware.zshot-ai.com/uploads/products/' +
+                    ? 'https://bladeware.masmutdev.id/uploads/products/' +
                       produkData.product_image
                     : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
                 "
@@ -255,7 +255,7 @@ const fetchFinanceBoost = async () => {
   try {
     const token = localStorage.getItem("jwt_token");
     const res = await axios.get(
-      "https://bladeware.zshot-ai.com/api/finance-boost",
+      "https://bladeware.masmutdev.id/api/finance-boost",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -299,7 +299,7 @@ const submitProduk = async () => {
     const { id, price, profit } = produkData.value;
 
     const res = await axios.post(
-      "https://bladeware.zshot-ai.com/api/submit-produk",
+      "https://bladeware.masmutdev.id/api/submit-produk",
       {
         id_products: id,
         price,
@@ -344,7 +344,7 @@ const toggleProduk = async () => {
     try {
       const token = localStorage.getItem("jwt_token");
       const res = await axios.get(
-        "https://bladeware.zshot-ai.com/api/get-produk",
+        "https://bladeware.masmutdev.id/api/get-produk",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -376,7 +376,7 @@ const fetchProfileData = async () => {
     if (!token) throw new Error("Token not found");
 
     const { data } = await axios.get(
-      "https://bladeware.zshot-ai.com/api/get-data-boost",
+      "https://bladeware.masmutdev.id/api/get-data-boost",
       {
         headers: {
           Authorization: `${token}`,

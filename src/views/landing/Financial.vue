@@ -178,7 +178,7 @@ const fetchFinance = async () => {
     if (!jwtToken) throw new Error("No token found");
 
     const { data } = await axios.get(
-      "https://bladeware.zshot-ai.com/api/get-finance",
+      "https://bladeware.masmutdev.id/api/get-finance",
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       }

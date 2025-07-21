@@ -196,7 +196,7 @@ export default {
         const ip_address = await getIpAddress(); // Ambil IP dulu
 
         const response = await axios.post(
-          "https://bladeware.zshot-ai.com/api/login",
+          "https://bladeware.masmutdev.id/api/login",
           {
             phone_email: username.value,
             password: loginPassword.value,

@@ -52,14 +52,20 @@
               <span>{{ record.date }}</span>
               <div class="flex flex-col justify-end items-end">
                 <span class="text-gray-500">
-                  {{ record.status == 0 
-                    ? "Successfully" 
-                    : (hasPendingData && index === 0 ? "" : "Pending") 
+                  {{
+                    record.status == 0
+                      ? "Successfully"
+                      : hasPendingData && index === 0
+                      ? ""
+                      : "Pending"
                   }}
                 </span>
 
                 <!-- Submit button hanya untuk index pertama -->
-                <div v-if="hasPendingData && index === 0" class="flex justify-center mt-4 mb-4">
+                <div
+                  v-if="hasPendingData && index === 0"
+                  class="flex justify-center mt-4 mb-4"
+                >
                   <button
                     @click="submitProdukPending"
                     class="bg-orange-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-orange-600"
@@ -67,7 +73,6 @@
                     Submit
                   </button>
                 </div>
-
 
                 <div class="text-xs text-gray-500">
                   Upload Profit Ratio: {{ record.boosted_ratio }}
@@ -81,7 +86,7 @@
                 height="40"
                 :src="
                   record.logo
-                    ? 'https://bladeware.zshot-ai.com/uploads/products/' +
+                    ? 'https://bladeware.masmutdev.id/uploads/products/' +
                       record.logo
                     : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
                 "
@@ -195,7 +200,7 @@ const fetchDataBoost = async () => {
     if (!jwtToken) throw new Error("No token found");
 
     const { data } = await axios.get(
-      "https://bladeware.zshot-ai.com/api/get-data-boost-apps",
+      "https://bladeware.masmutdev.id/api/get-data-boost-apps",
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       }
@@ -228,7 +233,7 @@ const submitProdukPending = async () => {
     const { id_products, total: price, profit } = pendingRecord;
 
     const res = await axios.post(
-      "https://bladeware.zshot-ai.com/api/submit-produk",
+      "https://bladeware.masmutdev.id/api/submit-produk",
       {
         id_products: id_products,
         price,
@@ -275,7 +280,7 @@ const fetchRecords = async () => {
     if (!jwtToken) throw new Error("No token found");
 
     const { data } = await axios.get(
-      "https://bladeware.zshot-ai.com/api/get-apps-records",
+      "https://bladeware.masmutdev.id/api/get-apps-records",
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       }
@@ -288,7 +293,7 @@ const fetchRecords = async () => {
         date: item.created_at,
         status: item.status,
         name: item.product_name,
-        boosted_ratio: item.boosted_ratio, 
+        boosted_ratio: item.boosted_ratio,
         logo: item.product_image,
         total: item.price,
         profit: item.profit,
