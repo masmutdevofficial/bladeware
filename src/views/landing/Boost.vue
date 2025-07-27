@@ -27,41 +27,56 @@
           <h2 class="text-xl font-semibold mb-2">{{ phone_email }}</h2>
 
           <!-- Social Icons -->
-          <div class="relative w-full max-w-xs h-[220px] overflow-hidden">
-            <!-- Gambar 1 -->
-            <img
-              src="@/assets/img/icon-all.png"
-              class="absolute w-full h-auto object-contain animate-iconFirst"
-            />
-
-            <!-- Gambar 2 -->
-            <img
-              src="@/assets/img/icon-all.png"
-              class="absolute w-full h-auto object-contain animate-iconSecond mask-gradient"
-            />
+          <div class="relative w-full max-w-xs h-[250px] overflow-hidden mb-3">
+            <div
+              :class="isAnimated ? 'transition-transform duration-700' : ''"
+              :style="{ transform: `translateY(-${translateY}px)` }"
+            >
+              <div
+                v-for="(img, idx) in images.concat([images[0]])"
+                :key="img + '-' + idx + '-' + Math.random()"
+                class="relative w-full h-[250px] block"
+              >
+                <!-- Gambar grayscale selalu tampil penuh -->
+                <img
+                  :src="img"
+                  class="w-full h-full object-contain block"
+                  style="filter: grayscale(1)"
+                  draggable="false"
+                />
+                <!-- Gambar berwarna hanya muncul jika maskProgress > 0 -->
+                <img
+                  v-if="maskProgress > 0"
+                  :src="img"
+                  class="w-full h-full object-contain block absolute top-0 left-0"
+                  :style="{
+                    WebkitMaskImage: `linear-gradient(to right, black ${maskProgress}%, transparent ${maskProgress}%)`,
+                    maskImage: `linear-gradient(to right, black ${maskProgress}%, transparent ${maskProgress}%)`,
+                  }"
+                  draggable="false"
+                />
+              </div>
+            </div>
           </div>
 
           <!-- Balance Info -->
-          <div
-            class="flex items-center justify-between w-full mb-8 border border-gray-200 rounded-lg px-4 py-3"
-          >
-            <div class="w-1/2 text-center">
-              <p class="text-sm text-orange-500 font-semibold">Total Balance</p>
+          <div class="grid grid-cols-2 gap-2 w-full mb-8 px-2 py-2">
+            <div class="flex flex-col items-center min-w-0">
+              <p class="text-sm text-orange-500">Total Balance</p>
               <p
-                class="font-semibold text-gray-800"
-                :class="windowWidth <= 380 ? 'text-[16px]' : 'text-lg'"
+                class="text-gray-800 truncate text-[16px] sm:text-lg"
+                :class="windowWidth <= 380 ? 'text-[15px]' : ''"
+                style="word-break: break-all"
               >
                 {{ Number(balance).toFixed(2) }} USDC
               </p>
             </div>
-            <div class="border-l h-full mx-2"></div>
-            <div class="w-1/2 text-center">
-              <p class="text-sm text-orange-500 font-semibold">
-                Today's Profit
-              </p>
+            <div class="flex flex-col items-center min-w-0">
+              <p class="text-sm text-orange-500">Today's Profit</p>
               <p
-                class="font-semibold text-gray-800"
-                :class="windowWidth <= 380 ? 'text-[16px]' : 'text-lg'"
+                class="text-gray-800 truncate text-[16px] sm:text-lg"
+                :class="windowWidth <= 380 ? 'text-[15px]' : ''"
+                style="word-break: break-all"
               >
                 {{ Number(todaysProfit).toFixed(2) }} USDC
               </p>
@@ -87,7 +102,7 @@
               v-if="priceAkhir > 0"
             >
               <p class="text-red-600 font-semibold text-sm">
-                {{ Number(minusSekarang).toFixed(2) }} USDC
+                Pending {{ Number(minusSekarang).toFixed(2) }} USDC
               </p>
             </div>
 
@@ -209,9 +224,32 @@
             </div>
             <button
               @click="submitProduk"
-              class="bg-orange-500 text-white py-3 px-8 rounded-lg text-lg w-full max-w-md mx-auto"
+              :disabled="isLoading"
+              class="bg-orange-500 text-white py-3 px-8 rounded-lg text-lg w-full max-w-md mx-auto flex items-center justify-center"
             >
-              Submit
+              <svg
+                v-if="isLoading"
+                class="animate-spin mr-2 h-6 w-6 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+              <span>
+                {{ isLoading ? "Boosting in progress..." : "Submit" }}
+              </span>
             </button>
           </div>
         </div>
@@ -221,8 +259,79 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import axios from "axios";
+import imgSrc from "@/assets/img/icon-all-bladeware.png";
+
+const imgHeight = 250;
+const isAnimated = ref(true);
+const translateY = ref(0);
+const maskProgress = ref(-1); // default -1 supaya gambar berwarna tidak muncul sama sekali di awal
+let sliderTimeoutId = null;
+let maskIntervalId = null;
+
+const images = [imgSrc, imgSrc];
+
+function startMaskAnimation(cb) {
+  maskProgress.value = 0;
+  let step = 1.2; // lebih kecil dari 4, jadi lebih lambat
+  let progress = 0;
+  if (maskIntervalId) clearInterval(maskIntervalId);
+
+  maskIntervalId = setInterval(() => {
+    progress += step;
+    if (progress >= 100) {
+      maskProgress.value = 100;
+      clearInterval(maskIntervalId);
+      if (cb) cb();
+    } else {
+      maskProgress.value = progress;
+    }
+  }, 20); // lebih lama antar frame (20ms, bisa ubah ke 25-30ms lebih lambat lagi)
+}
+
+function startSlider() {
+  isAnimated.value = true;
+  translateY.value += imgHeight;
+
+  sliderTimeoutId = setTimeout(() => {
+    if (translateY.value >= imgHeight * images.length) {
+      isAnimated.value = false;
+      translateY.value = 0;
+      setTimeout(() => {
+        isAnimated.value = true;
+        nextStep();
+      }, 20);
+    } else {
+      nextStep();
+    }
+  }, 1200);
+}
+
+function nextStep() {
+  sliderTimeoutId = setTimeout(async () => {
+    // Atur agar gambar slide berikutnya langsung grayscale
+    maskProgress.value = -1;
+    await nextTick();
+    maskProgress.value = 0;
+    startMaskAnimation(() => {
+      startSlider();
+    });
+  }, 300);
+}
+
+onMounted(async () => {
+  await nextTick();
+  maskProgress.value = 0;
+  startMaskAnimation(() => {
+    startSlider();
+  });
+});
+
+onUnmounted(() => {
+  if (sliderTimeoutId) clearTimeout(sliderTimeoutId);
+  if (maskIntervalId) clearInterval(maskIntervalId);
+});
 
 // Alert
 const alert = ref({ message: "", type: "success" });
@@ -250,6 +359,7 @@ const priceAkhir = ref(0);
 const profitAkhir = ref(0);
 const totalFrozen = ref(0);
 const minusSekarang = ref(0);
+const isLoading = ref(false);
 
 const fetchFinanceBoost = async () => {
   try {
@@ -294,6 +404,11 @@ const fetchFinanceBoost = async () => {
 };
 
 const submitProduk = async () => {
+  isLoading.value = true;
+
+  // Animasi loading selama 3 detik
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
   try {
     const token = localStorage.getItem("jwt_token");
     const { id, price, profit } = produkData.value;
@@ -322,7 +437,7 @@ const submitProduk = async () => {
       if (res.data.message === "Insufficient Balance") {
         setTimeout(() => {
           window.location.reload();
-        }, 1000); // Kasih delay sedikit biar alert muncul dulu
+        }, 1000);
       }
     }
   } catch (error) {
@@ -336,6 +451,8 @@ const submitProduk = async () => {
     }
 
     console.error(error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -419,62 +536,6 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-@keyframes iconSecond {
-  0%,
-  49.9% {
-    transform: translateY(0%);
-    filter: brightness(0);
-    mask-position: 100% 0;
-  }
-  50% {
-    transform: translateY(0%);
-  }
-  60% {
-    transform: translateY(0%);
-    filter: brightness(0);
-    mask-position: 100% 0;
-  }
-  80% {
-    filter: brightness(1);
-    mask-position: 0 0;
-  }
-  100% {
-    transform: translateY(0%);
-    filter: brightness(1);
-    mask-position: 0 0;
-  }
-}
-
-.animate-iconFirst {
-  animation: iconFirst 8s linear infinite;
-}
-
-.animate-iconSecond {
-  animation: iconSecond 5s linear infinite;
-  mask-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 1) 10%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  mask-size: 200% 100%;
-  mask-position: 100% 0;
-  mask-repeat: no-repeat;
-}
-
-/* Webkit mask fallback */
-@supports (-webkit-mask-image: linear-gradient(to right, black, transparent)) {
-  .mask-gradient {
-    -webkit-mask-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 1) 30%,
-      rgba(0, 0, 0, 0) 100%
-    );
-    -webkit-mask-size: 200% 100%;
-    -webkit-mask-position: 100% 0;
-    -webkit-mask-repeat: no-repeat;
-  }
-}
-
 /* Animasi Slide dari Bawah */
 .slide-up-enter-active,
 .slide-up-leave-active {

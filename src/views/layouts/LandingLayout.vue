@@ -364,8 +364,8 @@
   >
     <div class="relative w-[80%] lg:w-[20%]">
       <img
-        src="@/assets/img/pengumuman.jpg"
-        alt="Pengumuman"
+        src="@/assets/img/limited-event.jpg"
+        alt="Limited Event"
         class="rounded-lg shadow-lg"
       />
       <button

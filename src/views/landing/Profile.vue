@@ -21,11 +21,18 @@
           <div class="ml-4">
             <p class="text-gray-700 font-semibold">Hi, {{ user.name }}</p>
             <p class="text-gray-500 text-sm">
-              Phone number / Email: {{ user.phone_email }}
+              Phone Number:
+              <span class="text-orange-500">{{ user.phone_email || "-" }}</span>
+            </p>
+            <p class="text-gray-500 text-sm">
+              Email:
+              <span class="text-orange-500">{{ user.email_only || "-" }}</span>
             </p>
             <p class="text-gray-500 text-sm">
               Referral:
-              <span class="text-orange-500 text-sm">{{ user.referral }}</span>
+              <span class="text-orange-500 text-sm">{{
+                user.referral || "-"
+              }}</span>
             </p>
           </div>
         </div>
@@ -54,7 +61,9 @@
           <hr class="bg-gray-300 w-[1px] h-[30px]" />
           <div class="text-center flex flex-col justify-center items-center">
             <p class="text-orange-500">Total Profit</p>
-            <p class="text-gray-700">{{ infoUser.komisi }} USDC</p>
+            <p class="text-gray-700">
+              {{ (Number(infoUser.komisi) + 15).toFixed(2) }} USDC
+            </p>
           </div>
         </div>
         <div class="space-y-4">
@@ -168,7 +177,9 @@
                 <!-- Tombol Bind -->
                 <button
                   class="bg-orange-500 text-white w-full py-2 rounded-md mb-4"
-                  @click="bindWallet"
+                  :class="{ 'opacity-50 cursor-not-allowed': walletAddress }"
+                  :disabled="!!walletAddress"
+                  @click="walletAddress ? null : bindWallet"
                 >
                   Bind
                 </button>
@@ -218,12 +229,7 @@
                 <!-- Form Wallet -->
                 <div class="mb-4">
                   <!-- Wallet Address Input -->
-                  <input
-                    type="text"
-                    v-model="wdWallet"
-                    class="border-b-[1px] border-b-gray-200 p-2 w-full rounded-md mb-4"
-                    placeholder="Enter Your Wallet Address"
-                  />
+                  <input type="hidden" v-model="wdWallet" />
                   <!-- Amount Input -->
                   <input
                     type="number"

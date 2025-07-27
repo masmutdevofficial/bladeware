@@ -41,17 +41,27 @@
             >
               <span>{{ record.created_at }}</span>
 
-              <div class="flex flex-col items-end justify-end mt-2">
+              <div class="flex flex-col items-end justify-end">
                 <span class="text-gray-500">
-                  {{ selectedTab === "Deposit" ? "Deposit" : "Withdrawal" }}
+                  {{ selectedTab === "Deposit" ? "Deposit" : "" }}
                 </span>
                 <div
                   class="font-semibold"
-                  :class="
-                    record.status == 0 ? 'text-yellow-500' : 'text-green-600'
-                  "
+                  :class="{
+                    'text-yellow-500': record.status == 0,
+                    'text-green-600': record.status == 1,
+                    'text-red-500': record.status == 2,
+                  }"
                 >
-                  {{ record.status == 0 ? "Pending" : "Completed" }}
+                  {{
+                    record.status == 0
+                      ? "On Process"
+                      : record.status == 1
+                      ? "Completed"
+                      : record.status == 2
+                      ? "Rejected"
+                      : "-"
+                  }}
                 </div>
               </div>
             </div>
@@ -68,16 +78,16 @@
               </div>
             </div>
 
-            <div class="flex items-center justify-between">
-              <div class="mt-2">
+            <div class="grid grid-cols-2 gap-4 items-center mt-2">
+              <div>
                 <div class="text-sm text-start text-gray-500">Wallet</div>
-                <div class="font-semibold truncate">
+                <div class="font-semibold break-all">
                   {{ record.wallet_address }}
                 </div>
               </div>
 
-              <div class="mt-2">
-                <div class="text-sm text-end text-gray-500">Amount</div>
+              <div class="text-right">
+                <div class="text-sm text-gray-500">Amount</div>
                 <div class="font-semibold">
                   {{ record.amount }} {{ record.currency }}
                 </div>

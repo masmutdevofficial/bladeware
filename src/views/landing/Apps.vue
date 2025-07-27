@@ -32,81 +32,119 @@
         </div>
 
         <!-- Transaction List -->
-        <div v-if="filteredRecords.length">
+        <div v-if="groupedRecords.length">
           <div
-            v-for="(record, index) in filteredRecords"
-            :key="record.id"
+            v-for="(group, index) in groupedRecords"
+            :key="group.id || group.id"
             :class="[
-              'bg-white py-5 px-5 lg:py-5 lg:px-5 rounded-lg',
-              record.type === 'normal'
-                ? 'mb-4 mt-4'
-                : index === filteredRecords.length - 1
+              'bg-white mb-4  border-b border-black py-5 px-5 lg:py-5 lg:px-5 rounded-lg',
+              group.type === 'combination'
+                ? 'mb-4 mt-4 pb-0'
+                : index === groupedRecords.length - 1
                 ? 'mb-4'
                 : '',
-              record.type === 'combination' ? 'pb-0' : '',
+              group.type === 'combination' ? 'pb-0' : '',
             ]"
           >
-            <div
-              class="flex items-center justify-between text-sm text-gray-500"
-            >
-              <span>{{ record.date }}</span>
-              <div class="flex flex-col justify-end items-end">
-                <span class="text-gray-500">
-                  {{
-                    record.status == 0
-                      ? "Successfully"
-                      : hasPendingData && index === 0
-                      ? ""
-                      : "Pending"
-                  }}
-                </span>
-
-                <!-- Submit button hanya untuk index pertama -->
+            <!-- Combination Card -->
+            <template v-if="group.type === 'combination'">
+              <div class="divide-y divide-gray-100">
                 <div
-                  v-if="hasPendingData && index === 0"
-                  class="flex justify-center mt-4 mb-4"
+                  v-for="(record, cidx) in group.records"
+                  :key="record.id"
+                  class="flex items-center justify-between py-3"
                 >
-                  <button
-                    @click="submitProdukPending"
-                    class="bg-orange-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-orange-600"
-                  >
-                    Submit
-                  </button>
+                  <div class="flex items-center">
+                    <img
+                      :alt="record.name + ' logo'"
+                      class="w-10 h-10 rounded-full"
+                      height="40"
+                      :src="
+                        record.logo
+                          ? 'https://bladeware.masmutdev.id/uploads/products/' +
+                            record.logo
+                          : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
+                      "
+                      width="40"
+                    />
+                    <span class="ml-2 text-lg font-semibold">
+                      {{ record.name }}
+                    </span>
+                  </div>
+                  <div class="text-right min-w-[120px]">
+                    <div class="text-gray-500">Total Price</div>
+                    <div class="font-semibold">{{ record.total }} USDC</div>
+                    <div class="text-gray-500">Profit</div>
+                    <div class="font-semibold">{{ record.profit }} USDC</div>
+                    <div class="text-xs text-gray-500">
+                      Upload Profit Ratio: {{ record.boosted_ratio }}
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </template>
 
-                <div class="text-xs text-gray-500">
-                  Upload Profit Ratio: {{ record.boosted_ratio }}
+            <!-- Normal Card -->
+            <template v-else>
+              <div
+                class="flex items-center justify-between text-sm text-gray-500"
+              >
+                <span>{{ group.date }}</span>
+                <div class="flex flex-col justify-end items-end">
+                  <span class="text-gray-500">
+                    {{
+                      group.status == 0
+                        ? "Succeded"
+                        : hasPendingData && index === 0
+                        ? ""
+                        : "Pending"
+                    }}
+                  </span>
+                  <!-- Submit button hanya untuk index pertama -->
+                  <div
+                    v-if="hasPendingData && index === 0"
+                    class="flex justify-center mt-4 mb-4"
+                  >
+                    <button
+                      @click="submitProdukPending"
+                      class="bg-orange-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-orange-600"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                  <div class="text-xs text-gray-500">
+                    Upload Profit Ratio: {{ group.boosted_ratio }}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="flex items-center mt-2">
-              <img
-                :alt="record.name + ' logo'"
-                class="w-10 h-10 rounded-full"
-                height="40"
-                :src="
-                  record.logo
-                    ? 'https://bladeware.masmutdev.id/uploads/products/' +
-                      record.logo
-                    : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
-                "
-                width="40"
-              />
-              <span class="ml-2 text-lg font-semibold">
-                {{ record.name }}
-              </span>
-            </div>
-            <hr class="text-gray-300 my-4" />
-            <div class="flex justify-between mt-2 text-sm">
-              <div>
-                <div class="text-gray-500">Total Price</div>
-                <div class="font-semibold">{{ record.total }} USDC</div>
+              <div class="flex items-center mt-2">
+                <img
+                  :alt="group.name + ' logo'"
+                  class="w-10 h-10 rounded-full"
+                  height="40"
+                  :src="
+                    group.logo
+                      ? 'https://bladeware.masmutdev.id/uploads/products/' +
+                        group.logo
+                      : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
+                  "
+                  width="40"
+                />
+                <span class="ml-2 text-lg font-semibold">
+                  {{ group.name }}
+                </span>
               </div>
-              <div>
-                <div class="text-gray-500">Profit</div>
-                <div class="font-semibold">{{ record.profit }} USDC</div>
+              <div class="flex justify-between mt-2 text-sm">
+                <div>
+                  <div class="text-gray-500">Total Price</div>
+                  <div class="font-semibold">{{ group.total }} USDC</div>
+                </div>
+                <div>
+                  <div class="text-gray-500">Profit</div>
+                  <div class="font-semibold">{{ group.profit }} USDC</div>
+                </div>
               </div>
-            </div>
+            </template>
           </div>
         </div>
         <!-- No Data -->
@@ -210,7 +248,7 @@ const fetchDataBoost = async () => {
       const info = data.data.info_user;
 
       if (parseFloat(info.saldo) === 0 && parseFloat(info.saldo_beku) > 0) {
-        hasPendingData.value = true; // Ada data pending
+        hasPendingData.value = true;
       } else {
         hasPendingData.value = false;
       }
@@ -248,9 +286,9 @@ const submitProdukPending = async () => {
 
     if (res.data.status === "success") {
       showAlert(res.data.message, "success");
-      hasPendingData.value = false; // reset tombol Submit Pending
+      hasPendingData.value = false;
       await fetchDataBoost();
-      await fetchRecords(); // refresh records setelah submit
+      await fetchRecords();
     } else {
       showAlert(res.data.message, "error");
 
@@ -300,10 +338,8 @@ const fetchRecords = async () => {
         type: item.type,
       }));
     } else if (data.message === "Transaction not found") {
-      // Tidak ada data, tapi jangan munculkan alert
       records.value = [];
     } else {
-      // Alert untuk error lain
       console.error("Failed to fetch records:", data.message);
       showAlert(data.message || "Failed to load data", "error");
     }
@@ -324,6 +360,36 @@ const filteredRecords = computed(() => {
   if (selectedTab.value === "Pending")
     return records.value.filter((r) => r.status != 0);
   return [];
+});
+
+// Gabungkan combination ke dalam satu card
+const groupedRecords = computed(() => {
+  const result = [];
+  let combinationGroup = [];
+
+  for (const record of filteredRecords.value) {
+    if (record.type === "combination") {
+      combinationGroup.push(record);
+    } else {
+      if (combinationGroup.length) {
+        result.push({
+          type: "combination",
+          records: combinationGroup,
+          id: "combination-" + combinationGroup[0].id,
+        });
+        combinationGroup = [];
+      }
+      result.push(record);
+    }
+  }
+  if (combinationGroup.length) {
+    result.push({
+      type: "combination",
+      records: combinationGroup,
+      id: "combination-" + combinationGroup[0].id,
+    });
+  }
+  return result;
 });
 
 // On load
