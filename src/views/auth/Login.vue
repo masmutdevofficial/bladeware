@@ -179,11 +179,16 @@ export default {
     };
     const getIpAddress = async () => {
       try {
-        const res = await axios.get("https://api.ipify.org?format=json");
+        const res = await axios.get("https://api.myip.com");
         return res.data.ip;
       } catch (error) {
-        console.error("Gagal ambil IP Address", error);
-        return null;
+        try {
+          const res = await axios.get("https://ipinfo.io/json");
+          return res.data.ip;
+        } catch (err) {
+          console.error("Gagal ambil IP Address", err);
+          return null;
+        }
       }
     };
     const login = async () => {
