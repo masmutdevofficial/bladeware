@@ -153,7 +153,8 @@
             class="flex justify-center lg:justify-start items-center lg:items-start"
           >
             <button
-              class="bg-white text-[#333] py-2 px-4 rounded-lg mt-4 w-[160px]"
+              @click="handleButtonClick"
+              class="bg-white relative z-10 cursor-pointer text-[#333] py-2 px-4 rounded-lg mt-4 w-[160px]"
             >
               {{ $t("text-4") }}
             </button>
@@ -163,3 +164,16 @@
     </div>
   </div>
 </template>
+<script setup>
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const handleButtonClick = () => {
+  const token = localStorage.getItem("jwt_token");
+  if (!token) {
+    router.push("/login");
+  } else {
+    router.push("/boost");
+  }
+};
+</script>

@@ -358,7 +358,7 @@
                 maliciously violates this agreement, this website reserves the
                 right to pursue legal liability.
               </p>
-              <p class="text-black text-[12px] mb-5">4. Recharge</p>
+              <p class="text-black text-[12px] mb-5">(4). Recharge</p>
               <p class="text-black text-[12px]">
                 4.1 Due to the large amount of information on the platform,
                 users should contact customer service to confirm and carefully
@@ -370,7 +370,9 @@
                 a screenshot of the successful payment so that the online
                 customer service can credit the user.
               </p>
-              <p class="text-black text-[12px] mb-5">5. App Merchant Coop's</p>
+              <p class="text-black text-[12px] mb-5">
+                (5). App Merchant Coop's
+              </p>
               <p class="text-black text-[12px]">
                 5.1 Applications data volume is adjusted based on market
                 conditions.
@@ -387,17 +389,17 @@
                 5.4 If you're worried that the combination data volume will be
                 overwhelming, don't recharge too much data to start boosting.
               </p>
-              <p class="text-black text-[12px] mb-5">6. Withdrawal</p>
-              <p class="text-black text-[12px]">
+              <p class="text-black text-[12px] mb-5">(6). Withdrawal</p>
+              <p class="text-black text-[12px] mb-5">
                 Withdrawal time is from 10:00 to 22:00 every day.
               </p>
-              <p class="text-black text-[12px] mb-5">7. Bladeware Users</p>
+              <p class="text-black text-[12px] mb-5">(7). Bladeware Users</p>
               <p class="text-black text-[12px] mb-5">
                 Users can receive additional rewards by referring new users to
                 become Bladeware users. The remuneration is 20% of the
                 recommender's total remuneration for the day.
               </p>
-              <p class="text-black text-[12px] mb-5">8. Business hours</p>
+              <p class="text-black text-[12px] mb-5">(8). Business hours</p>
               <p class="text-black text-[12px] mb-5">
                 Users can start boosting data during daily business hours
                 10:00-22:00.
