@@ -61,7 +61,7 @@
                       height="40"
                       :src="
                         record.logo
-                          ? 'https://bladeware.masmutdev.id/uploads/products/' +
+                          ? 'https://bladeware.masmut.dev/uploads/products/' +
                             record.logo
                           : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
                       "
@@ -124,7 +124,7 @@
                   height="40"
                   :src="
                     group.logo
-                      ? 'https://bladeware.masmutdev.id/uploads/products/' +
+                      ? 'https://bladeware.masmut.dev/uploads/products/' +
                         group.logo
                       : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
                   "
@@ -238,7 +238,7 @@ const fetchDataBoost = async () => {
     if (!jwtToken) throw new Error("No token found");
 
     const { data } = await axios.get(
-      "https://bladeware.masmutdev.id/api/get-data-boost-apps",
+      "https://bladeware.masmut.dev/api/get-data-boost-apps",
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       }
@@ -271,7 +271,7 @@ const submitProdukPending = async () => {
     const { id_products, total: price, profit } = pendingRecord;
 
     const res = await axios.post(
-      "https://bladeware.masmutdev.id/api/submit-produk",
+      "https://bladeware.masmut.dev/api/submit-produk",
       {
         id_products: id_products,
         price,
@@ -318,7 +318,7 @@ const fetchRecords = async () => {
     if (!jwtToken) throw new Error("No token found");
 
     const { data } = await axios.get(
-      "https://bladeware.masmutdev.id/api/get-apps-records",
+      "https://bladeware.masmut.dev/api/get-apps-records",
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       }
