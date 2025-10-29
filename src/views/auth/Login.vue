@@ -205,7 +205,7 @@ import { IconEye, IconEyeClosed, IconX } from "@tabler/icons-vue";
 
 // gambar layanan
 import whatsappImage from "@/assets/img/whatsapp.png";
-import telegramImage from "https://cdn-icons-png.flaticon.com/512/2111/2111646.png";
+const telegramImage = "https://cdn-icons-png.flaticon.com/512/2111/2111646.png";
 
 export default {
   components: {

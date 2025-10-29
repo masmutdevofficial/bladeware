@@ -154,13 +154,7 @@
           >
             {{ $t("about") }}
           </router-link>
-          <!-- Tombol Language -->
-          <div
-            class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
-            @click="toggleLanguageMobile"
-          >
-            {{ $t("language") }}
-          </div>
+
 
           <div class="w-full">
             <!-- Jika sudah login -->
