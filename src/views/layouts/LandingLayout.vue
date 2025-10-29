@@ -436,7 +436,6 @@ watch(showPengumuman, (val) => {
 const languages = {
   en: "English",
   id: "Bahasa Indonesia",
-  fr: "Français",
 };
 
 const changeLanguage = (langCode) => {
