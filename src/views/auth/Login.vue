@@ -33,6 +33,7 @@
               <IconX class="w-5 h-5 text-gray-300" />
             </button>
           </div>
+
           <!-- LOGIN PASSWORD -->
           <div class="relative mb-0">
             <input
@@ -58,15 +59,19 @@
               <IconEyeClosed v-else />
             </button>
           </div>
+
+          <!-- Forgot -->
           <div class="text-right">
-            <a
-              href="https://wa.me/6289510056758"
-              target="_blank"
-              class="text-sm text-gray-500 hover:text-green-500"
+            <button
+              type="button"
+              @click="openSupportModal"
+              class="text-sm text-gray-500 hover:text-green-500 underline-offset-2 hover:underline"
             >
               Forgot your password?
-            </a>
+            </button>
           </div>
+
+          <!-- Login -->
           <div class="mb-0">
             <button
               type="button"
@@ -76,6 +81,7 @@
               Login
             </button>
           </div>
+
           <div class="text-end">
             <span class="text-sm text-gray-500">
               No account?
@@ -88,7 +94,7 @@
       </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Alert Modal -->
     <div
       v-if="alert.message"
       class="fixed inset-0 flex items-center justify-center bg-black/30 z-50"
@@ -99,7 +105,6 @@
           'bg-black/70 text-white',
         ]"
       >
-        <!-- SVG Ikon -->
         <div class="mb-3">
           <svg
             v-if="alert.type === 'success'"
@@ -136,24 +141,101 @@
             <path d="M15 8l-6 8" />
           </svg>
         </div>
-
-        <!-- Pesan Alert -->
         <p>{{ alert.message }}</p>
+      </div>
+    </div>
+
+    <!-- Support Modal -->
+    <div
+      v-if="showSupportModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
+      @click.self="closeSupportModal"
+    >
+      <div
+        class="w-[92%] max-w-md rounded-lg bg-white text-gray-800 p-5 shadow-lg"
+      >
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold">Customer Service</h3>
+          <button type="button" @click="closeSupportModal" aria-label="Close">
+            <IconX class="w-5 h-5 text-gray-500" />
+          </button>
+        </div>
+
+        <div class="grid gap-4">
+          <!-- WhatsApp -->
+          <div>
+            <div class="mb-2 text-sm font-medium">WhatsApp</div>
+            <div class="grid gap-2">
+              <a
+                v-for="(num, i) in waNumbers"
+                :key="'wa-'+i"
+                :href="`https://wa.me/${num}?text=${encodeURIComponent(defaultWAmsg)}`"
+                target="_blank"
+                rel="noopener"
+                class="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2 hover:bg-gray-50"
+              >
+                <div class="flex items-center gap-2">
+                  <IconBrandWhatsapp class="w-5 h-5" />
+                  <span class="text-sm">+{{ prettyPhone(num) }}</span>
+                </div>
+                <span class="text-xs text-gray-500">Chat</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Telegram -->
+          <div>
+            <div class="mb-2 text-sm font-medium">Telegram</div>
+            <div class="grid gap-2">
+              <a
+                v-for="(user, i) in tgUsernames"
+                :key="'tg-'+i"
+                :href="`https://t.me/${user}`"
+                target="_blank"
+                rel="noopener"
+                class="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2 hover:bg-gray-50"
+              >
+                <div class="flex items-center gap-2">
+                  <IconBrandTelegram class="w-5 h-5" />
+                  <span class="text-sm">@{{ user }}</span>
+                </div>
+                <span class="text-xs text-gray-500">Open</span>
+              </a>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            @click="closeSupportModal"
+            class="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { IconEye, IconEyeClosed, IconX } from "@tabler/icons-vue";
+import {
+  IconEye,
+  IconEyeClosed,
+  IconX,
+  IconBrandWhatsapp,
+  IconBrandTelegram,
+} from "@tabler/icons-vue";
 
 export default {
   components: {
     IconEye,
     IconEyeClosed,
     IconX,
+    IconBrandWhatsapp,
+    IconBrandTelegram,
   },
   setup() {
     const username = ref("");
@@ -163,20 +245,32 @@ export default {
 
     const alert = ref({
       message: "",
-      type: "success", // atau "error"
+      type: "success",
     });
 
     const showAlert = (message, type = "error") => {
-      alert.value = {
-        message,
-        type,
-      };
-
-      // Auto-close dalam 3 detik
+      alert.value = { message, type };
       setTimeout(() => {
         alert.value.message = "";
       }, 3000);
     };
+
+    // --- Support Modal state ---
+    const showSupportModal = ref(false);
+    const defaultWAmsg = "Halo CS, saya lupa password. Mohon bantuannya.";
+    // Ganti dengan nomor/username asli (format wa.me: tanpa '+', wajib kode negara)
+    const waNumbers = ref([
+      "6289510056758", // existing
+      "6281234567890",
+      "6289876543210",
+    ]);
+    const tgUsernames = ref(["cs_1", "cs_2", "cs_3"]);
+
+    const openSupportModal = () => (showSupportModal.value = true);
+    const closeSupportModal = () => (showSupportModal.value = false);
+    const prettyPhone = (num) =>
+      String(num).replace(/^62/, "62 ").replace(/(\d{3})(\d{4})(\d+)/, "$1 $2 $3");
+
     const getIpAddress = async () => {
       try {
         const res = await axios.get("https://api.myip.com");
@@ -191,29 +285,26 @@ export default {
         }
       }
     };
+
     const login = async () => {
       if (!username.value || !loginPassword.value) {
         showAlert("Username and password cannot be empty.", "error");
         return;
       }
-
       try {
-        const ip_address = await getIpAddress(); // Ambil IP dulu
-
+        const ip_address = await getIpAddress();
         const response = await axios.post(
           "https://bladeware.masmut.dev/api/login",
           {
             phone_email: username.value,
             password: loginPassword.value,
-            ip_address: ip_address, // kirim IP bareng login
+            ip_address,
           }
         );
-
         const token = response.data.token;
         if (token) {
           localStorage.setItem("jwt_token", token);
           showAlert("Login successful!", "success");
-
           setTimeout(() => {
             router.push("/profile");
           }, 1000);
@@ -235,6 +326,15 @@ export default {
       login,
       alert,
       showAlert,
+
+      // support modal
+      showSupportModal,
+      openSupportModal,
+      closeSupportModal,
+      waNumbers,
+      tgUsernames,
+      defaultWAmsg,
+      prettyPhone,
     };
   },
 };
