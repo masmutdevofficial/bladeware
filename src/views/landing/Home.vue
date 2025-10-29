@@ -624,7 +624,7 @@
               {{ $t("text-74") }}
             </p>
           </div>
-          <div
+          <!-- <div
             class="flex justify-center lg:justify-start items-center lg:items-start"
           >
             <button
@@ -633,7 +633,7 @@
             >
               {{ $t("text-4") }}
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

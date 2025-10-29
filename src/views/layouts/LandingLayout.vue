@@ -216,37 +216,6 @@
         {{ $t("login-register") }}
       </router-link>
 
-      <!-- Dropdown Language -->
-      <div
-        class="relative cursor-pointer"
-        @mouseenter="isDropdownOpen = true"
-        @mouseleave="isDropdownOpen = false"
-      >
-        <button
-          class="text-black text-sm font-normal flex items-center hover:text-[#ff961b] duration-500 cursor-pointer"
-        >
-          {{ $t("language") }}
-          <IconChevronDown class="w-5 h-5 ml-1" />
-        </button>
-
-        <!-- Dropdown Menu -->
-        <transition name="fade">
-          <div
-            v-if="isDropdownOpen"
-            class="absolute right-0 w-45 bg-white border border-gray-300 shadow-lg overflow-hidden"
-          >
-            <a
-              v-for="(lang, code) in languages"
-              :key="code"
-              href="#"
-              @click.prevent="changeLanguage(code)"
-              class="block px-4 py-2 text-black text-lg text-center transition hover:bg-gray-100"
-            >
-              {{ lang }}
-            </a>
-          </div>
-        </transition>
-      </div>
     </div>
   </header>
   <main>
