@@ -17,7 +17,7 @@
 
       <div class="w-full md:w-1/2 lg:pl-12">
         <div class="space-y-4">
-          <!-- Username -->
+          <!-- Username (opsional) -->
           <div class="relative">
             <input
               v-model="username"
@@ -35,7 +35,7 @@
             </button>
           </div>
 
-          <!-- Phone number -->
+          <!-- Phone number (opsional) -->
           <div class="relative">
             <input
               v-model="phoneEmail"
@@ -53,7 +53,7 @@
             </button>
           </div>
 
-          <!-- Email -->
+          <!-- Email (opsional) -->
           <div class="relative">
             <input
               v-model="emailOnly"
@@ -71,7 +71,7 @@
             </button>
           </div>
 
-          <!-- LOGIN PASSWORD -->
+          <!-- LOGIN PASSWORD (wajib) -->
           <div class="relative">
             <input
               v-model="loginPassword"
@@ -97,7 +97,7 @@
             </button>
           </div>
 
-          <!-- CONFIRM LOGIN PASSWORD -->
+          <!-- CONFIRM LOGIN PASSWORD (wajib) -->
           <div class="relative">
             <input
               v-model="confirmLoginPassword"
@@ -123,7 +123,7 @@
             </button>
           </div>
 
-          <!-- WITHDRAWAL PASSWORD -->
+          <!-- WITHDRAWAL PASSWORD (wajib) -->
           <div class="relative">
             <input
               v-model="withdrawalPassword"
@@ -149,7 +149,7 @@
             </button>
           </div>
 
-          <!-- CONFIRM WITHDRAWAL PASSWORD -->
+          <!-- CONFIRM WITHDRAWAL PASSWORD (wajib) -->
           <div class="relative">
             <input
               v-model="confirmWithdrawalPassword"
@@ -175,7 +175,7 @@
             </button>
           </div>
 
-          <!-- REFERRAL CODE -->
+          <!-- REFERRAL CODE (tetap sesuai kebutuhan backend) -->
           <div class="relative">
             <input
               v-model="referralCode"
@@ -223,7 +223,6 @@
         <!-- Agreement -->
         <div class="mt-5">
           <label class="flex items-center space-x-2 cursor-pointer" @click="showModal = true">
-            <!-- visual custom checkbox -->
             <input type="checkbox" v-model="isChecked" class="hidden" />
             <div
               class="w-5 h-5 border border-gray-400 rounded flex items-center justify-center"
@@ -344,27 +343,31 @@ export default {
   setup() {
     const router = useRouter();
 
+    // Identitas: boleh isi salah satu
     const username = ref("");
     const phoneEmail = ref("");
     const emailOnly = ref("");
+
+    // Passwords
     const loginPassword = ref("");
     const confirmLoginPassword = ref("");
     const withdrawalPassword = ref("");
     const confirmWithdrawalPassword = ref("");
+
     const referralCode = ref("");
 
+    // Agreement modal
     const showModal = ref(false);
     const isChecked = ref(false);
 
+    // Alert
     const alert = ref({ message: "", type: "success" });
-
     const showAlert = (message, type = "error") => {
       alert.value = { message, type };
-      setTimeout(() => {
-        alert.value.message = "";
-      }, 3000);
+      setTimeout(() => (alert.value.message = ""), 3000);
     };
 
+    // toggles
     const showLoginPassword = ref(false);
     const showConfirmLoginPassword = ref(false);
     const showWithdrawalPassword = ref(false);
@@ -375,18 +378,43 @@ export default {
       isChecked.value = true; // dianggap sudah membaca & menyetujui
     };
 
+    // Validator sederhana
+    const isValidEmail = (v) =>
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim());
+    const isValidPhone = (v) => {
+      const s = String(v).replace(/[\s-]/g, "");
+      return /^(\+?\d{8,20})$/.test(s);
+    };
+
     const register = async () => {
       // Wajib setuju
       if (!isChecked.value) {
-        showAlert("You must agree to the user agreement and privacy policy.", "error");
+        showAlert(
+          "You must agree to the user agreement and privacy policy.",
+          "error"
+        );
         return;
       }
 
-      // Validasi input dasar
+      // Minimal salah satu identitas
+      const hasIdentity = !!(username.value || phoneEmail.value || emailOnly.value);
+      if (!hasIdentity) {
+        showAlert("Isi salah satu: username / phone number / email.", "error");
+        return;
+      }
+
+      // Jika diisi, validasi formatnya
+      if (emailOnly.value && !isValidEmail(emailOnly.value)) {
+        showAlert("Format email tidak valid.", "error");
+        return;
+      }
+      if (phoneEmail.value && !isValidPhone(phoneEmail.value)) {
+        showAlert("Format nomor telepon tidak valid.", "error");
+        return;
+      }
+
+      // Validasi field wajib lainnya
       if (
-        !username.value ||
-        !phoneEmail.value ||
-        !emailOnly.value ||
         !loginPassword.value ||
         !confirmLoginPassword.value ||
         !withdrawalPassword.value ||
@@ -408,16 +436,18 @@ export default {
       }
 
       try {
+        const payload = {
+          username: username.value || "",
+          phone_email: phoneEmail.value || "",
+          email_only: emailOnly.value || "",
+          password: loginPassword.value,
+          withdrawal_password: withdrawalPassword.value,
+          referral: referralCode.value,
+        };
+
         const response = await axios.post(
           "https://bladeware.masmut.dev/api/register",
-          {
-            username: username.value,
-            phone_email: phoneEmail.value,
-            email_only: emailOnly.value,
-            password: loginPassword.value,
-            withdrawal_password: withdrawalPassword.value,
-            referral: referralCode.value,
-          },
+          payload,
           { headers: { "Content-Type": "application/json" } }
         );
 
@@ -428,31 +458,43 @@ export default {
           showAlert(response.data.message || "Registration failed.", "error");
         }
       } catch (error) {
-        showAlert(error.response?.data?.message || "Registration failed.", "error");
+        showAlert(
+          error.response?.data?.message || "Registration failed.",
+          "error"
+        );
       }
     };
 
     return {
+      // identity
       username,
       phoneEmail,
       emailOnly,
+
+      // passwords
       loginPassword,
       confirmLoginPassword,
       withdrawalPassword,
       confirmWithdrawalPassword,
+
       referralCode,
 
+      // toggles
       showLoginPassword,
       showConfirmLoginPassword,
       showWithdrawalPassword,
       showConfirmWithdrawalPassword,
 
+      // agreement
       showModal,
       isChecked,
       closeModal,
 
+      // alert
       alert,
       showAlert,
+
+      // actions
       register,
     };
   },

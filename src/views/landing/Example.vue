@@ -6,7 +6,7 @@
       <h2
         class="text-[#ff861b] text-sm lg:text-lg font-normal font-[Helvetica Neue] leading-tight mb-2"
       >
-        {{ $t("text-62") }}
+        Example Study
       </h2>
       <h1 class="text-[20px] lg:text-[35px] font-bold leading-tight">
         {{ $t("text-63") }}
