@@ -737,7 +737,7 @@
         <p
           class="text-[#ff861b] text-sm font-normal font-[Helvetica Neue] leading-tight my-3 mx-5"
         >
-          {{ $t("text-87") }}
+          Pippin
         </p>
         <h2 class="text-sm lg:text-lg font-bold mb-2 my-3 mx-5">
           {{ $t("text-88") }}
@@ -766,7 +766,7 @@
         <p
           class="text-[#ff861b] text-sm font-normal font-[Helvetica Neue] leading-tight my-3 mx-5"
         >
-          {{ $t("text-91") }}
+          Homa Games
         </p>
         <h2 class="text-sm lg:text-lg font-bold mb-2 my-3 mx-5">
           {{ $t("text-92") }}
@@ -781,6 +781,122 @@
           <p class="text-[#ff961b] text-lg font-bold my-3 mx-5">+40%</p>
           <p class="text-gray-700 text-[12px] lg:text-[16px]">
             {{ $t("text-94") }}
+          </p>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-lg">
+        <img
+          alt="Answear.com SA screenshot"
+          class="rounded-t-lg mb-4"
+          height="300"
+          src="@/assets/img/yx3.png"
+          width="600"
+        />
+        <p
+          class="text-[#ff861b] text-sm font-normal font-[Helvetica Neue] leading-tight my-3 mx-5"
+        >
+          Answear.com SA
+        </p>
+        <h2 class="text-sm lg:text-lg font-bold mb-2 my-3 mx-5">
+          {{ $t("text-130") }}
+        </h2>
+        <p class="text-gray-700 mb-4 my-3 mx-5 text-[12px] lg:text-[16px]">
+          {{ $t("text-131") }}
+        </p>
+        <div class="flex justify-center items-center">
+          <div class="w-[90%] h-[1px] bg-gray-300"></div>
+        </div>
+        <div class="flex flex-row items-center">
+          <p class="text-[#ff961b] text-lg font-bold my-3 mx-5">+101%</p>
+          <p class="text-gray-700 text-[12px] lg:text-[16px]">
+            {{ $t("text-132") }}
+          </p>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-lg">
+        <img
+          alt="Aliens screenshot"
+          class="rounded-t-lg mb-4"
+          height="300"
+          src="@/assets/img/yx4.jpg"
+          width="600"
+        />
+        <p
+          class="text-[#ff861b] text-sm font-normal font-[Helvetica Neue] leading-tight my-3 mx-5"
+        >
+          Aliens
+        </p>
+        <h2 class="text-sm lg:text-lg font-bold mb-2 my-3 mx-5">
+          {{ $t("text-133") }}
+        </h2>
+        <p class="text-gray-700 mb-4 my-3 mx-5 text-[12px] lg:text-[16px]">
+          {{ $t("text-134") }}
+        </p>
+        <div class="flex justify-center items-center">
+          <div class="w-[90%] h-[1px] bg-gray-300"></div>
+        </div>
+        <div class="flex flex-row items-center">
+          <p class="text-[#ff961b] text-lg font-bold my-3 mx-5">+186%</p>
+          <p class="text-gray-700 text-[12px] lg:text-[16px]">
+            {{ $t("text-135") }}
+          </p>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-lg">
+        <img
+          alt="Dine4Fit app screenshot"
+          class="rounded-t-lg mb-4"
+          height="300"
+          src="@/assets/img/yx5.png"
+          width="600"
+        />
+        <p
+          class="text-[#ff861b] text-sm font-normal font-[Helvetica Neue] leading-tight my-3 mx-5"
+        >
+          Dine4Fit (Kalorickie Tabulky)
+        </p>
+        <h2 class="text-sm lg:text-lg font-bold mb-2 my-3 mx-5">
+          {{ $t("text-136") }}
+        </h2>
+        <p class="text-gray-700 mb-4 my-3 mx-5 text-[12px] lg:text-[16px]">
+          {{ $t("text-137") }}
+        </p>
+        <div class="flex justify-center items-center">
+          <div class="w-[90%] h-[1px] bg-gray-300"></div>
+        </div>
+        <div class="flex flex-row items-center">
+          <p class="text-[#ff961b] text-lg font-bold my-3 mx-5">+258%</p>
+          <p class="text-gray-700 text-[12px] lg:text-[16px]">
+            {{ $t("text-132") }}
+          </p>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-lg">
+        <img
+          alt="Aion Bank screenshot"
+          class="rounded-t-lg mb-4"
+          height="300"
+          src="@/assets/img/yx6.png"
+          width="600"
+        />
+        <p
+          class="text-[#ff861b] text-sm font-normal font-[Helvetica Neue] leading-tight my-3 mx-5"
+        >
+          Aion Bank
+        </p>
+        <h2 class="text-sm lg:text-lg font-bold mb-2 my-3 mx-5">
+          {{ $t("text-138") }}
+        </h2>
+        <p class="text-gray-700 mb-4 my-3 mx-5 text-[12px] lg:text-[16px]">
+          {{ $t("text-139") }}
+        </p>
+        <div class="flex justify-center items-center">
+          <div class="w-[90%] h-[1px] bg-gray-300"></div>
+        </div>
+        <div class="flex flex-row items-center">
+          <p class="text-[#ff961b] text-lg font-bold my-3 mx-5">+251%</p>
+          <p class="text-gray-700 text-[12px] lg:text-[16px]">
+            {{ $t("text-140") }}
           </p>
         </div>
       </div>

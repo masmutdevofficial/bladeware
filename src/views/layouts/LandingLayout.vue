@@ -392,29 +392,18 @@ const isLoggedIn = ref(false);
 
 watch(
   () => route.path,
-  (newPath) => {
+  () => {
     const token = localStorage.getItem("jwt_token");
     isLoggedIn.value = !!token;
 
-    const alreadySeen = localStorage.getItem("pengumuman_seen");
-
-    if (
-      isLoggedIn.value &&
-      (newPath === "/" || newPath === "/profile") &&
-      !alreadySeen
-    ) {
-      showPengumuman.value = true;
-    }
+    // Tampilkan terus kalau login (tanpa localStorage)
+    showPengumuman.value = isLoggedIn.value;
   },
   { immediate: true }
 );
 
+
 // Saat modal ditutup otomatis, simpan state ke localStorage
-watch(showPengumuman, (val) => {
-  if (!val) {
-    localStorage.setItem("pengumuman_seen", "true");
-  }
-});
 
 // Daftar bahasa yang tersedia
 const languages = {
