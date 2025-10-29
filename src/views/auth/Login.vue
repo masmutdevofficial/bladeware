@@ -285,6 +285,7 @@ export default {
         if (token) {
           localStorage.setItem("jwt_token", token);
           showAlert("Login successful!", "success");
+          sessionStorage.setItem("just_logged_in", "1");
           setTimeout(() => {
             router.push("/profile");
           }, 1000);

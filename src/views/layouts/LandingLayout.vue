@@ -386,7 +386,7 @@ const isLanguageMenuOpen = ref(false);
 const { locale } = useI18n();
 const appSettings = useAppSettingsStore();
 const showPengumuman = ref(false);
-
+const hasShownThisLogin = ref(false);
 // Deteksi login dari token lokal
 const isLoggedIn = ref(false);
 
@@ -394,14 +394,26 @@ watch(
   () => route.path,
   () => {
     const token = localStorage.getItem("jwt_token");
-    isLoggedIn.value = !!token;
+    const loggedIn = !!token;
+    isLoggedIn.value = loggedIn;
 
-    // Tampilkan terus kalau login (tanpa localStorage)
-    showPengumuman.value = isLoggedIn.value;
+    if (loggedIn) {
+      // jika baru login (ditandai dari halaman login)
+      const just = sessionStorage.getItem("just_logged_in");
+      if (just === "1" && !hasShownThisLogin.value) {
+        showPengumuman.value = true;      // tampilkan sekali
+        hasShownThisLogin.value = true;   // kunci supaya tidak muncul lagi
+        sessionStorage.removeItem("just_logged_in"); // hapus flag
+      }
+      // jika bukan baru login, jangan auto tampilkan
+    } else {
+      // reset guard ketika logout
+      hasShownThisLogin.value = false;
+      showPengumuman.value = false;
+    }
   },
   { immediate: true }
 );
-
 
 // Saat modal ditutup otomatis, simpan state ke localStorage
 
@@ -464,8 +476,12 @@ const nextMonth = () => {
 
 const logout = () => {
   localStorage.removeItem("jwt_token");
+  sessionStorage.removeItem("just_logged_in");
+  hasShownThisLogin.value = false;
+  showPengumuman.value = false;
   router.push("/login");
 };
+
 
 // Navigasi tahun
 const prevYear = () => {
