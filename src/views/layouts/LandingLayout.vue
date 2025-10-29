@@ -268,35 +268,54 @@
     </button>
   </div>
   <!-- Modal -->
-  <div
-    v-if="showModal"
-    class="fixed z-90 inset-0 flex items-start justify-center pt-20"
-    style="background: rgba(0, 0, 0, 0.8)"
-    @click="closeModal"
-  >
-    <div class="bg-white p-6 w-80">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-lg font-bold">Customer Service Center</h2>
-        <button @click="closeModal" class="text-orange-500 text-xl">
-          <IconX class="cursor-pointer" />
-        </button>
-      </div>
-      <div class="flex justify-around">
-        <div
-          class="text-center"
-          v-for="(service, index) in services"
-          :key="index"
-        >
-          <img
-            :src="service.image"
-            alt="Service Icon"
-            class="w-12 h-12 mx-auto mb-2"
-          />
-          <p class="text-sm">{{ service.name }}</p>
+    <!-- Customer Service Modal -->
+    <div
+      v-if="showModal"
+      class="fixed z-90 inset-0 flex items-start justify-center pt-20"
+      style="background: rgba(0, 0, 0, 0.8)"
+      @click="closeModal"
+    >
+      <div class="bg-white p-6 w-80" @click.stop>
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-bold">Customer Service Center</h2>
+          <button @click="closeModal" class="text-orange-500 text-xl">
+            <IconX class="cursor-pointer" />
+          </button>
+        </div>
+
+        <!-- WhatsApp row -->
+        <div class="flex justify-around">
+          <div
+            class="text-center"
+            v-for="(service, index) in services"
+            :key="'wa-' + index"
+          >
+            <img
+              :src="service.image"
+              alt="Service Icon"
+              class="w-12 h-12 mx-auto mb-2"
+            />
+            <p class="text-sm">{{ service.name }}</p>
+          </div>
+        </div>
+
+        <!-- Telegram row (di bawahnya) -->
+        <div class="flex justify-around mt-4">
+          <div
+            class="text-center"
+            v-for="(service, index) in servicesTelegram"
+            :key="'tg-' + index"
+          >
+            <img
+              :src="service.image"
+              alt="Service Icon"
+              class="w-12 h-12 mx-auto mb-2"
+            />
+            <p class="text-sm">{{ service.name }}</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   <div
     v-if="isLoading"
     class="fixed inset-0 flex justify-center items-center z-50"
@@ -377,6 +396,7 @@ import { ref, computed, watch } from "vue";
 import { IconChevronDown } from "@tabler/icons-vue";
 import { IconX } from "@tabler/icons-vue";
 import whatsappImage from "@/assets/img/whatsapp.png"; // Import gambar
+
 import { IconMenuDeep } from "@tabler/icons-vue"; // Import ikon dari Tabler
 import DaunJatuh from "@/components/DaunJatuh.vue";
 import { useAppSettingsStore } from "@/stores/appSettings";
@@ -386,6 +406,7 @@ import { useRoute } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();
+const telegramImage = "https://cdn-icons-png.flaticon.com/512/2111/2111646.png";
 
 // State untuk menampilkan dropdown
 const isDropdownOpen = ref(false);
@@ -509,20 +530,17 @@ const toggleCalendar = () => {
   showCalendar.value = !showCalendar.value;
 };
 
-const services = ref([
-  {
-    name: "WhatsApp",
-    image: whatsappImage,
-  },
-  {
-    name: "WhatsApp",
-    image: whatsappImage,
-  },
-  {
-    name: "WhatsApp",
-    image: whatsappImage,
-  },
-]);
+    const services = ref([
+      { name: "WhatsApp", image: whatsappImage },
+      { name: "WhatsApp", image: whatsappImage },
+      { name: "WhatsApp", image: whatsappImage },
+    ]);
+
+    const servicesTelegram = ref([
+      { name: "Telegram", image: telegramImage },
+      { name: "Telegram", image: telegramImage },
+      { name: "Telegram", image: telegramImage },
+    ]);
 
 // Fungsi untuk menutup menu saat backdrop diklik
 const closeMenu = () => {
