@@ -14,6 +14,7 @@
       <div class="hidden lg:flex text-center md:text-left mb-8 md:mb-0">
         <img src="@/assets/img/logo.png" class="w-70" alt="" />
       </div>
+
       <div class="w-full md:w-1/2">
         <div class="space-y-4">
           <!-- Username -->
@@ -64,7 +65,7 @@
           <div class="text-right">
             <button
               type="button"
-              @click="openSupportModal"
+              @click="openModal"
               class="text-sm text-gray-500 hover:text-green-500 underline-offset-2 hover:underline"
             >
               Forgot your password?
@@ -85,8 +86,8 @@
           <div class="text-end">
             <span class="text-sm text-gray-500">
               No account?
-              <router-link class="text-sm text-[#ff961b]" to="register"
-                >Register now
+              <router-link class="text-sm text-[#ff961b]" to="register">
+                Register now
               </router-link>
             </span>
           </div>
@@ -145,72 +146,51 @@
       </div>
     </div>
 
-    <!-- Support Modal -->
+    <!-- Customer Service Modal -->
     <div
-      v-if="showSupportModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
-      @click.self="closeSupportModal"
+      v-if="showModal"
+      class="fixed z-90 inset-0 flex items-start justify-center pt-20"
+      style="background: rgba(0, 0, 0, 0.8)"
+      @click="closeModal"
     >
-      <div
-        class="w-[92%] max-w-md rounded-lg bg-white text-gray-800 p-5 shadow-lg"
-      >
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-base font-semibold">Customer Service</h3>
-          <button type="button" @click="closeSupportModal" aria-label="Close">
-            <IconX class="w-5 h-5 text-gray-500" />
+      <div class="bg-white p-6 w-80" @click.stop>
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-bold">Customer Service Center</h2>
+          <button @click="closeModal" class="text-orange-500 text-xl">
+            <IconX class="cursor-pointer" />
           </button>
         </div>
 
-        <div class="grid gap-4">
-          <!-- WhatsApp -->
-          <div>
-            <div class="mb-2 text-sm font-medium">WhatsApp</div>
-            <div class="grid gap-2">
-              <a
-                v-for="(num, i) in waNumbers"
-                :key="'wa-'+i"
-                :href="`https://wa.me/${num}?text=${encodeURIComponent(defaultWAmsg)}`"
-                target="_blank"
-                rel="noopener"
-                class="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2 hover:bg-gray-50"
-              >
-                <div class="flex items-center gap-2">
-                  <IconBrandWhatsapp class="w-5 h-5" />
-                  <span class="text-sm">+{{ prettyPhone(num) }}</span>
-                </div>
-                <span class="text-xs text-gray-500">Chat</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Telegram -->
-          <div>
-            <div class="mb-2 text-sm font-medium">Telegram</div>
-            <div class="grid gap-2">
-              <a
-                v-for="(user, i) in tgUsernames"
-                :key="'tg-'+i"
-                :href="`https://t.me/${user}`"
-                target="_blank"
-                rel="noopener"
-                class="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2 hover:bg-gray-50"
-              >
-                <div class="flex items-center gap-2">
-                  <IconBrandTelegram class="w-5 h-5" />
-                  <span class="text-sm">@{{ user }}</span>
-                </div>
-                <span class="text-xs text-gray-500">Open</span>
-              </a>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            @click="closeSupportModal"
-            class="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+        <!-- WhatsApp row -->
+        <div class="flex justify-around">
+          <div
+            class="text-center"
+            v-for="(service, index) in services"
+            :key="'wa-' + index"
           >
-            Close
-          </button>
+            <img
+              :src="service.image"
+              alt="Service Icon"
+              class="w-12 h-12 mx-auto mb-2"
+            />
+            <p class="text-sm">{{ service.name }}</p>
+          </div>
+        </div>
+
+        <!-- Telegram row (di bawahnya) -->
+        <div class="flex justify-around mt-4">
+          <div
+            class="text-center"
+            v-for="(service, index) in servicesTelegram"
+            :key="'tg-' + index"
+          >
+            <img
+              :src="service.image"
+              alt="Service Icon"
+              class="w-12 h-12 mx-auto mb-2"
+            />
+            <p class="text-sm">{{ service.name }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -221,21 +201,17 @@
 import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import {
-  IconEye,
-  IconEyeClosed,
-  IconX,
-  IconBrandWhatsapp,
-  IconBrandTelegram,
-} from "@tabler/icons-vue";
+import { IconEye, IconEyeClosed, IconX } from "@tabler/icons-vue";
+
+// gambar layanan
+import whatsappImage from "@/assets/img/whatsapp.png";
+import telegramImage from "https://cdn-icons-png.flaticon.com/512/2111/2111646.png";
 
 export default {
   components: {
     IconEye,
     IconEyeClosed,
     IconX,
-    IconBrandWhatsapp,
-    IconBrandTelegram,
   },
   setup() {
     const username = ref("");
@@ -255,21 +231,23 @@ export default {
       }, 3000);
     };
 
-    // --- Support Modal state ---
-    const showSupportModal = ref(false);
-    const defaultWAmsg = "Halo CS, saya lupa password. Mohon bantuannya.";
-    // Ganti dengan nomor/username asli (format wa.me: tanpa '+', wajib kode negara)
-    const waNumbers = ref([
-      "6289510056758", // existing
-      "6281234567890",
-      "6289876543210",
-    ]);
-    const tgUsernames = ref(["cs_1", "cs_2", "cs_3"]);
+    // Modal CS
+    const showModal = ref(false);
+    const openModal = () => (showModal.value = true);
+    const closeModal = () => (showModal.value = false);
 
-    const openSupportModal = () => (showSupportModal.value = true);
-    const closeSupportModal = () => (showSupportModal.value = false);
-    const prettyPhone = (num) =>
-      String(num).replace(/^62/, "62 ").replace(/(\d{3})(\d{4})(\d+)/, "$1 $2 $3");
+    // Data icon layanan
+    const services = ref([
+      { name: "WhatsApp", image: whatsappImage },
+      { name: "WhatsApp", image: whatsappImage },
+      { name: "WhatsApp", image: whatsappImage },
+    ]);
+
+    const servicesTelegram = ref([
+      { name: "Telegram", image: telegramImage },
+      { name: "Telegram", image: telegramImage },
+      { name: "Telegram", image: telegramImage },
+    ]);
 
     const getIpAddress = async () => {
       try {
@@ -291,6 +269,7 @@ export default {
         showAlert("Username and password cannot be empty.", "error");
         return;
       }
+
       try {
         const ip_address = await getIpAddress();
         const response = await axios.post(
@@ -301,6 +280,7 @@ export default {
             ip_address,
           }
         );
+
         const token = response.data.token;
         if (token) {
           localStorage.setItem("jwt_token", token);
@@ -327,14 +307,12 @@ export default {
       alert,
       showAlert,
 
-      // support modal
-      showSupportModal,
-      openSupportModal,
-      closeSupportModal,
-      waNumbers,
-      tgUsernames,
-      defaultWAmsg,
-      prettyPhone,
+      // modal cs
+      showModal,
+      openModal,
+      closeModal,
+      services,
+      servicesTelegram,
     };
   },
 };
