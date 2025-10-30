@@ -132,14 +132,6 @@
           >
             {{ $t("example-study") }}
           </router-link>
-          <router-link
-            v-if="isLoggedIn"
-            class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
-            to="/service"
-            @click="closeMenu"
-          >
-            {{ $t("apps_records") }}
-          </router-link>
 
           <div class="w-full">
             <!-- Jika sudah login -->
