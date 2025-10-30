@@ -44,13 +44,13 @@
         >
           {{ $t("example-study") }}
         </router-link>
-        <router-link
+        <!-- <router-link
           v-if="isLoggedIn"
           class="text-black text-sm cursor-pointer font-normal hover:text-[#ff961b] hover:scale-110 transition-transform duration-500 inline-block"
           to="/profile"
         >
           {{ $t("profile") }}
-        </router-link>
+        </router-link> -->
       </nav>
 
       <!-- ICON MENU (Muncul saat layar < 700px) -->
@@ -96,14 +96,14 @@
           >
             {{ $t("limited_event") }}
           </span>
-          <router-link
+          <!-- <router-link
             v-if="isLoggedIn"
             class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
             to="/profile"
             @click="closeMenu"
           >
             {{ $t("profile") }}
-          </router-link>
+          </router-link> -->
           <router-link
             class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
             to="/about"
@@ -178,7 +178,7 @@
       <button
         v-if="isLoggedIn"
         @click="logout"
-        class="bg-[#ff961b] mr-12 cursor-pointer hover:scale-110 transition-transform duration-500 inline-block text-white text-sm px-6 py-[10px] rounded-[10px] shadow-md shadow-[rgba(243,174,78,0.52)] w-full"
+        class="bg-[#ff961b] mr-12 mt-12 cursor-pointer hover:scale-110 transition-transform duration-500 inline-block text-white text-sm px-6 py-[10px] rounded-[10px] shadow-md shadow-[rgba(243,174,78,0.52)] w-full"
       >
         {{ $t("logout") }}
       </button>
