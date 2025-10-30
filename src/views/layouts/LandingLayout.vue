@@ -341,7 +341,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watch } from "vue";
 import axios from "axios";
 import { IconChevronDown } from "@tabler/icons-vue";
 import { IconX } from "@tabler/icons-vue";
@@ -379,7 +379,6 @@ const fetchBanner = async () => {
     const jwtToken = localStorage.getItem("jwt_token");
     if (!jwtToken) throw new Error("No token");
 
-    // Ambil nilai banner
     const { data } = await axios.get(
       "https://bladeware.masmut.dev/api/banner",
       { headers: { Authorization: `Bearer ${jwtToken}` } }
@@ -391,55 +390,60 @@ const fetchBanner = async () => {
 
     bannerValue.value = val;
     bannerSrc.value = val === 0 ? bannerNew : bannerLimited;
-    showPengumuman.value = true;
 
-    // Jika masih 0 (first time), ubah ke 1 supaya hanya muncul sekali seumur akun
     if (val === 0) {
+      // FIRST-TIME: tampilkan banner registrasi, lalu set ke 1
+      showPengumuman.value = true;
+
       try {
         await axios.patch(
           "https://bladeware.masmut.dev/api/banner/register",
           {},
           { headers: { Authorization: `Bearer ${jwtToken}` } }
         );
-        // Opsional: kunci state lokal ke 1 agar fetch berikutnya di sesi ini dianggap sudah 1
-        bannerValue.value = 1;
+        bannerValue.value = 1; // konsistensi lokal
       } catch (err) {
         console.error("register banner failed:", err?.response?.data || err);
       }
+
+      // hindari banner limited ikut muncul di login ini
+      sessionStorage.removeItem("just_logged_in");
     }
+
+    // NOTE: jika val === 1 (limited), JANGAN show di sini.
   } catch (e) {
     console.error("fetchBanner error:", e);
-    // fallback: tetap tampilkan limited
+    // fallback: perlakukan sebagai limited tanpa auto-show
+    bannerValue.value = 1;
     bannerSrc.value = bannerLimited;
-    showPengumuman.value = true;
   }
 };
 
-
 watch(
   () => route.path,
-  () => {
+  async () => {
     const token = localStorage.getItem("jwt_token");
     const loggedIn = !!token;
     isLoggedIn.value = loggedIn;
 
     if (loggedIn) {
-      // jika baru login (ditandai dari halaman login)
+      await fetchBanner(); // set bannerValue & bannerSrc
+
       const just = sessionStorage.getItem("just_logged_in");
-      if (just === "1" && !hasShownThisLogin.value) {
-        showPengumuman.value = true;      // tampilkan sekali
-        hasShownThisLogin.value = true;   // kunci supaya tidak muncul lagi
-        sessionStorage.removeItem("just_logged_in"); // hapus flag
+      if (bannerValue.value === 1 && just === "1") {
+        // LIMITED: show sekali per login
+        showPengumuman.value = true;
+        sessionStorage.removeItem("just_logged_in"); // supaya refresh tidak muncul lagi
       }
-      // jika bukan baru login, jangan auto tampilkan
     } else {
-      // reset guard ketika logout
-      hasShownThisLogin.value = false;
+      // logout: bersihkan flag & modal
+      sessionStorage.removeItem("just_logged_in");
       showPengumuman.value = false;
     }
   },
   { immediate: true }
 );
+
 
 // Saat modal ditutup otomatis, simpan state ke localStorage
 
@@ -564,10 +568,6 @@ const toggleLanguageMobile = () => {
 const closeModal = () => {
   showModal.value = false;
 };
-
-onMounted(() => {
-  fetchBanner(); // <= tambahkan ini
-});
 
 </script>
 
