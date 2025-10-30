@@ -138,7 +138,7 @@
             <button
               v-if="isLoggedIn"
               @click="logout"
-              class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
+              class="text-black mt-12 font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
             >
               {{ $t("logout") }}
             </button>
@@ -178,7 +178,7 @@
       <button
         v-if="isLoggedIn"
         @click="logout"
-        class="bg-[#ff961b] mr-12 mt-12 cursor-pointer hover:scale-110 transition-transform duration-500 inline-block text-white text-sm px-6 py-[10px] rounded-[10px] shadow-md shadow-[rgba(243,174,78,0.52)] w-full"
+        class="bg-[#ff961b] mr-12 cursor-pointer hover:scale-110 transition-transform duration-500 inline-block text-white text-sm px-6 py-[10px] rounded-[10px] shadow-md shadow-[rgba(243,174,78,0.52)] w-full"
       >
         {{ $t("logout") }}
       </button>
