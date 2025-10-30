@@ -44,13 +44,6 @@
         >
           {{ $t("example-study") }}
         </router-link>
-        <div
-          v-if="isLoggedIn"
-          class="text-black text-sm cursor-pointer font-normal hover:text-[#ff961b] hover:scale-110 transition-transform duration-500 inline-block"
-          @click="toggleCalendar"
-        >
-          {{ $t("daily_project") }}
-        </div>
         <router-link
           v-if="isLoggedIn"
           class="text-black text-sm cursor-pointer font-normal hover:text-[#ff961b] hover:scale-110 transition-transform duration-500 inline-block"
@@ -113,10 +106,24 @@
           </router-link>
           <router-link
             class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
+            to="/about"
+            @click="closeMenu"
+          >
+            {{ $t("about") }}
+          </router-link>
+          <router-link
+            class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
             to="/solution"
             @click="closeMenu"
           >
             {{ $t("solution") }}
+          </router-link>
+          <router-link
+            class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
+            to="/service"
+            @click="closeMenu"
+          >
+            {{ $t("service") }}
           </router-link>
           <router-link
             class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
@@ -133,28 +140,6 @@
           >
             {{ $t("apps_records") }}
           </router-link>
-          <div
-            v-if="isLoggedIn"
-            class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
-            @click="toggleCalendar"
-          >
-            {{ $t("daily_project") }}
-          </div>
-          <router-link
-            class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
-            to="/service"
-            @click="closeMenu"
-          >
-            {{ $t("service") }}
-          </router-link>
-          <router-link
-            class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
-            to="/about"
-            @click="closeMenu"
-          >
-            {{ $t("about") }}
-          </router-link>
-
 
           <div class="w-full">
             <!-- Jika sudah login -->
