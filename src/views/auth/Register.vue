@@ -244,7 +244,7 @@
           @click="closeModal"
           class="fixed inset-0 flex items-center justify-center bg-black/50"
         >
-          <div class="bg-white p-6 shadow-lg w-[50%] h-[70%] overflow-clip" @click.stop>
+          <div class="bg-white p-6 shadow-lg w-[70%] h-[70%] overflow-clip" @click.stop>
             <div class="relative">
               <button
                 @click="closeModal"
