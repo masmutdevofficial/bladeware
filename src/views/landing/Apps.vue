@@ -31,12 +31,14 @@
           </div>
         </div>
 
-        <!-- Welcome Bonus -->
-        <div class="bg-white rounded-lg border border-gray-200 py-4 px-5 mb-4 flex justify-between items-center">
-          <span class="text-gray-600 font-medium">Welcome Bonus</span>
-          <span class="text-lg font-semibold">{{ formattedWelcomeBonus }} USDC</span>
-        </div>
-
+<!-- Welcome Bonus -->
+<div
+  v-if="showWelcomeBonusCard"
+  class="bg-white rounded-lg border border-gray-200 py-4 px-5 mb-4 flex justify-between items-center"
+>
+  <span class="text-gray-600 font-medium">Welcome Bonus</span>
+  <span class="text-lg font-semibold">{{ formattedWelcomeBonus }} USDC</span>
+</div>
         <!-- Transaction List -->
         <div v-if="groupedRecords.length">
           <div
@@ -238,7 +240,10 @@ const showAlert = (message, type = "error") => {
 const records = ref([]);
 const hasPendingData = ref(false);
 const welcomeBonus = ref(0); // <-- TAMBAH
-
+const showWelcomeBonusCard = computed(() =>
+  (selectedTab.value === 'All' || selectedTab.value === 'Successfully') &&
+  Number(welcomeBonus.value) > 0
+);
 // Formatting
 const formattedWelcomeBonus = computed(() =>
   Number(welcomeBonus.value || 0).toFixed(2)
