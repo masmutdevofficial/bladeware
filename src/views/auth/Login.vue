@@ -78,7 +78,7 @@
               type="button"
               @click="login"
               :disabled="isLoading"
-              class="bg-[#ff961b] cursor-pointer inline-block text-white text-sm py-4 px-12 rounded-[10px] shadow-md shadow-[rgba(243,174,78,0.52)] w-full flex items-center justify-center"
+              class="bg-[#ff961b] cursor-pointer flex flex-row text-white text-sm py-4 px-12 rounded-[10px] shadow-md shadow-[rgba(243,174,78,0.52)] w-full flex items-center justify-center"
             >
               <svg
                 v-if="isLoading"

@@ -31,14 +31,6 @@
           </div>
         </div>
 
-<!-- Welcome Bonus -->
-<div
-  v-if="showWelcomeBonusCard"
-  class="bg-white rounded-lg border border-gray-200 py-4 px-5 mb-4 flex justify-between items-center"
->
-  <span class="text-gray-600 font-medium">Welcome Bonus</span>
-  <span class="text-lg font-semibold">{{ formattedWelcomeBonus }} USDC</span>
-</div>
         <!-- Transaction List -->
         <div v-if="groupedRecords.length">
           <div
@@ -239,16 +231,6 @@ const showAlert = (message, type = "error") => {
 // Data
 const records = ref([]);
 const hasPendingData = ref(false);
-const welcomeBonus = ref(0); // <-- TAMBAH
-const showWelcomeBonusCard = computed(() =>
-  (selectedTab.value === 'All' || selectedTab.value === 'Successfully') &&
-  Number(welcomeBonus.value) > 0
-);
-// Formatting
-const formattedWelcomeBonus = computed(() =>
-  Number(welcomeBonus.value || 0).toFixed(2)
-);
-
 
 const fetchDataBoost = async () => {
   try {
@@ -257,27 +239,24 @@ const fetchDataBoost = async () => {
 
     const { data } = await axios.get(
       "https://bladeware.masmut.dev/api/get-data-boost-apps",
-      { headers: { Authorization: `Bearer ${jwtToken}` } }
+      {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      }
     );
 
     if (data.status === "success") {
       const info = data.data.info_user;
 
-      // set flag pending
       if (parseFloat(info.saldo) === 0 && parseFloat(info.saldo_beku) > 0) {
         hasPendingData.value = true;
       } else {
         hasPendingData.value = false;
       }
-
-      // <-- TAMBAH: ambil total bonus terdaftar
-      welcomeBonus.value = Number(data?.data?.registered_bonus_total ?? 0);
     }
   } catch (error) {
     console.error("Gagal fetch data boost:", error);
   }
 };
-
 
 const submitProdukPending = async () => {
   try {

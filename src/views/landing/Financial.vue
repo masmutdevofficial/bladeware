@@ -42,9 +42,9 @@
               <span>{{ record.created_at }}</span>
 
               <div class="flex flex-col items-end justify-end">
-                <span class="text-gray-500">
-                  {{ selectedTab === "Deposit" ? "Deposit" : "" }}
-                </span>
+<span class="text-gray-500">
+  {{ record.category_deposit || (selectedTab === "Deposit" ? "Deposit" : "") }}
+</span>
                 <div
                   class="font-semibold"
                   :class="{
@@ -189,14 +189,31 @@ const fetchFinance = async () => {
 
     const { data } = await axios.get(
       "https://bladeware.masmut.dev/api/get-finance",
-      {
-        headers: { Authorization: `Bearer ${jwtToken}` },
-      }
+      { headers: { Authorization: `Bearer ${jwtToken}` } }
     );
 
     if (data.status === "success") {
       deposits.value = data.data.deposits || [];
       withdrawals.value = data.data.withdrawals || [];
+
+      // ===== Inject "Welcome Bonus" ke Deposit tab =====
+      const wb = data?.data?.welcome_bonus;
+      const amount = Number(wb?.amount ?? 0);
+      if (amount > 0) {
+        // Item sintetis untuk ditampilkan di daftar Deposit
+        deposits.value.unshift({
+          id: null,
+          created_at: wb?.last_awarded_at || new Date().toISOString(),
+          status: 1, // dianggap Completed
+          network_address: "-",
+          currency: "USDC",
+          wallet_address: "-",
+          amount: amount,
+          category_deposit: "Welcome Bonus", // <- dipakai di template label
+        });
+      }
+      // ================================================
+
     } else if (data.message === "Transaction not found") {
       deposits.value = [];
       withdrawals.value = [];
@@ -211,12 +228,11 @@ const fetchFinance = async () => {
   }
 };
 
-// Computed for selected tab
+// Computed untuk tab terpilih
 const filteredRecords = computed(() => {
   return selectedTab.value === "Deposit" ? deposits.value : withdrawals.value;
 });
 
-// On load
 onMounted(() => {
   fetchFinance();
 });
