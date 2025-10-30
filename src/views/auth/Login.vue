@@ -77,11 +77,34 @@
             <button
               type="button"
               @click="login"
-              class="bg-[#ff961b] cursor-pointer inline-block text-white text-sm py-4 px-12 rounded-[10px] shadow-md shadow-[rgba(243,174,78,0.52)] w-full"
+              :disabled="isLoading"
+              class="bg-[#ff961b] cursor-pointer inline-block text-white text-sm py-4 px-12 rounded-[10px] shadow-md shadow-[rgba(243,174,78,0.52)] w-full flex items-center justify-center"
             >
-              Login
+              <svg
+                v-if="isLoading"
+                class="animate-spin mr-2 h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                />
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
+              </svg>
+              <span>{{ isLoading ? "Logging in..." : "Login" }}</span>
             </button>
           </div>
+
 
           <div class="text-end">
             <span class="text-sm text-gray-500">
@@ -202,47 +225,33 @@ import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { IconEye, IconEyeClosed, IconX } from "@tabler/icons-vue";
-
-// gambar layanan
 import whatsappImage from "@/assets/img/whatsapp.png";
 const telegramImage = "https://cdn-icons-png.flaticon.com/512/2111/2111646.png";
 
 export default {
-  components: {
-    IconEye,
-    IconEyeClosed,
-    IconX,
-  },
+  components: { IconEye, IconEyeClosed, IconX },
   setup() {
     const username = ref("");
     const loginPassword = ref("");
     const showLoginPassword = ref(false);
+    const isLoading = ref(false); // <-- tambahkan
     const router = useRouter();
 
-    const alert = ref({
-      message: "",
-      type: "success",
-    });
-
+    const alert = ref({ message: "", type: "success" });
     const showAlert = (message, type = "error") => {
       alert.value = { message, type };
-      setTimeout(() => {
-        alert.value.message = "";
-      }, 3000);
+      setTimeout(() => (alert.value.message = ""), 3000);
     };
 
-    // Modal CS
     const showModal = ref(false);
     const openModal = () => (showModal.value = true);
     const closeModal = () => (showModal.value = false);
 
-    // Data icon layanan
     const services = ref([
       { name: "WhatsApp", image: whatsappImage },
       { name: "WhatsApp", image: whatsappImage },
       { name: "WhatsApp", image: whatsappImage },
     ]);
-
     const servicesTelegram = ref([
       { name: "Telegram", image: telegramImage },
       { name: "Telegram", image: telegramImage },
@@ -253,12 +262,11 @@ export default {
       try {
         const res = await axios.get("https://api.myip.com");
         return res.data.ip;
-      } catch (error) {
+      } catch {
         try {
           const res = await axios.get("https://ipinfo.io/json");
           return res.data.ip;
-        } catch (err) {
-          console.error("Gagal ambil IP Address", err);
+        } catch {
           return null;
         }
       }
@@ -269,10 +277,12 @@ export default {
         showAlert("Username and password cannot be empty.", "error");
         return;
       }
+      if (isLoading.value) return; // cegah double submit
+      isLoading.value = true;
 
       try {
         const ip_address = await getIpAddress();
-        const response = await axios.post(
+        const { data } = await axios.post(
           "https://bladeware.masmut.dev/api/login",
           {
             phone_email: username.value,
@@ -281,11 +291,11 @@ export default {
           }
         );
 
-        const token = response.data.token;
+        const token = data.token;
         if (token) {
           localStorage.setItem("jwt_token", token);
-          showAlert("Login successful!", "success");
           sessionStorage.setItem("just_logged_in", "1");
+          showAlert("Login successful!", "success");
           setTimeout(() => {
             router.push("/profile");
           }, 1000);
@@ -297,6 +307,8 @@ export default {
           error.response?.data?.message || "Login failed. Please try again.",
           "error"
         );
+      } finally {
+        isLoading.value = false; // matikan spinner
       }
     };
 
@@ -304,11 +316,10 @@ export default {
       username,
       loginPassword,
       showLoginPassword,
+      isLoading,         // <-- expose ke template
       login,
       alert,
       showAlert,
-
-      // modal cs
       showModal,
       openModal,
       closeModal,
@@ -317,4 +328,5 @@ export default {
     };
   },
 };
+
 </script>

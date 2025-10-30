@@ -103,86 +103,77 @@
 
                 <!-- Form Wallet -->
                 <div class="mb-4">
-                  <!-- Select Withdrawal Network -->
-                  <div
-                    class="border-b-[1px] border-b-gray-200 py-4 flex justify-between items-center text-gray-500 mb-2 cursor-pointer"
-                    @click="toggleDropdown('network')"
-                  >
-                    <span>{{
-                      selectedNetwork || "Select Your Withdrawal Network"
-                    }}</span>
-                    <IconChevronRight
-                      v-if="!showNetworkDropdown"
-                      class="text-gray-500 w-5 h-5"
-                    />
-                    <IconChevronDown
-                      v-if="showNetworkDropdown"
-                      class="text-gray-500 w-5 h-5"
-                    />
-                  </div>
-                  <div
-                    v-if="showNetworkDropdown"
-                    class="bg-gray-100 flex flex-col justify-center items-center p-2 rounded-md"
-                  >
-                    <p
-                      v-for="network in networks"
-                      :key="network"
-                      class="py-2 px-3 cursor-pointer hover:bg-gray-200 hover:w-full hover:text-center text-gray-500"
-                      @click="selectNetwork(network)"
-                    >
-                      {{ network }}
-                    </p>
-                  </div>
+<!-- Select Withdrawal Network -->
+<div
+  class="border-b-[1px] border-b-gray-200 py-4 flex justify-between items-center text-gray-500 mb-2 cursor-pointer"
+  :class="isWalletBound ? 'opacity-60 cursor-not-allowed' : ''"
+  @click="!isWalletBound && toggleDropdown('network')"
+>
+  <span>{{ selectedNetwork || "Select Your Withdrawal Network" }}</span>
+  <IconChevronRight v-if="!showNetworkDropdown" class="text-gray-500 w-5 h-5" />
+  <IconChevronDown v-if="showNetworkDropdown && !isWalletBound" class="text-gray-500 w-5 h-5" />
+</div>
 
-                  <!-- Select Withdrawal Currency -->
-                  <div
-                    class="border-b-[1px] border-b-gray-200 py-4 flex justify-between items-center text-gray-500 mb-2 cursor-pointer"
-                    @click="toggleDropdown('currency')"
-                  >
-                    <span>{{
-                      selectedCurrency || "Select Your Withdrawal Currency"
-                    }}</span>
-                    <IconChevronRight
-                      v-if="!showCurrencyDropdown"
-                      class="text-gray-500 w-5 h-5"
-                    />
-                    <IconChevronDown
-                      v-if="showCurrencyDropdown"
-                      class="text-gray-500 w-5 h-5"
-                    />
-                  </div>
-                  <div
-                    v-if="showCurrencyDropdown"
-                    class="bg-gray-100 flex flex-col justify-center items-center p-2 rounded-md"
-                  >
-                    <p
-                      v-for="currency in currencies"
-                      :key="currency"
-                      class="py-2 px-3 cursor-pointer hover:bg-gray-200 hover:w-full hover:text-center text-gray-500"
-                      @click="selectCurrency(currency)"
-                    >
-                      {{ currency }}
-                    </p>
-                  </div>
+<div
+  v-if="showNetworkDropdown && !isWalletBound"
+  class="bg-gray-100 flex flex-col justify-center items-center p-2 rounded-md"
+>
+  <p
+    v-for="network in networks"
+    :key="network"
+    class="py-2 px-3 cursor-pointer hover:bg-gray-200 hover:w-full hover:text-center text-gray-500"
+    @click="selectNetwork(network)"
+  >
+    {{ network }}
+  </p>
+</div>
 
-                  <!-- Wallet Address Input -->
-                  <input
-                    type="text"
-                    v-model="walletAddress"
-                    class="border-b-[1px] border-b-gray-200 p-2 w-full rounded-md"
-                    placeholder="Enter Your Wallet Address"
-                  />
+<!-- Select Withdrawal Currency -->
+<div
+  class="border-b-[1px] border-b-gray-200 py-4 flex justify-between items-center text-gray-500 mb-2 cursor-pointer"
+  :class="isWalletBound ? 'opacity-60 cursor-not-allowed' : ''"
+  @click="!isWalletBound && toggleDropdown('currency')"
+>
+  <span>{{ selectedCurrency || "Select Your Withdrawal Currency" }}</span>
+  <IconChevronRight v-if="!showCurrencyDropdown" class="text-gray-500 w-5 h-5" />
+  <IconChevronDown v-if="showCurrencyDropdown && !isWalletBound" class="text-gray-500 w-5 h-5" />
+</div>
+
+<div
+  v-if="showCurrencyDropdown && !isWalletBound"
+  class="bg-gray-100 flex flex-col justify-center items-center p-2 rounded-md"
+>
+  <p
+    v-for="currency in currencies"
+    :key="currency"
+    class="py-2 px-3 cursor-pointer hover:bg-gray-200 hover:w-full hover:text-center text-gray-500"
+    @click="selectCurrency(currency)"
+  >
+    {{ currency }}
+  </p>
+</div>
+
+<!-- Wallet Address Input -->
+<input
+  type="text"
+  v-model="walletAddress"
+  class="border-b-[1px] border-b-gray-200 p-2 w-full rounded-md"
+  :class="isWalletBound ? 'bg-gray-100 cursor-not-allowed' : ''"
+  :disabled="isWalletBound"
+  placeholder="Enter Your Wallet Address"
+/>
+
                 </div>
 
                 <!-- Tombol Bind -->
-                <button
-                  class="bg-orange-500 text-white w-full py-2 rounded-md mb-4"
-                  :class="{ 'opacity-50 cursor-not-allowed': walletAddress }"
-                  :disabled="!!walletAddress"
-                  @click="walletAddress ? null : bindWallet"
-                >
-                  Bind
-                </button>
+ <button
+  :disabled="!canBind"
+  @click="canBind ? bindWallet() : null"
+  class="w-full py-2 rounded-md mb-4 text-white"
+  :class="canBind ? 'bg-orange-500 hover:bg-orange-600' : 'bg-gray-300 cursor-not-allowed'"
+>
+  Bind
+</button>
 
                 <!-- Informasi -->
                 <div class="text-gray-500 text-sm">
@@ -682,6 +673,12 @@ const showWalletForm = ref(false);
 const showWdForm = ref(false);
 const showChangeLoginPassword = ref(false);
 const showChangeWithdrawalPassword = ref(false);
+const canBind = computed(() =>
+  !isWalletBound.value &&
+  !!walletAddress.value &&
+  !!selectedNetwork.value &&
+  !!selectedCurrency.value
+);
 
 const walletAddress = ref("");
 const wdWallet = ref("");
