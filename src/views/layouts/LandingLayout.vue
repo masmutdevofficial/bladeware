@@ -322,7 +322,12 @@
     class="fixed inset-0 bg-black/30 flex items-center justify-center z-50"
   >
     <div class="relative w-[80%] lg:w-[20%]">
-      <img :src="bannerSrc" alt="Banner" class="rounded-lg shadow-lg" />
+      <img
+        :src="bannerSrc"
+        alt="Banner"
+        class="rounded-lg shadow-lg"
+        :style="bannerSrc === bannerNew ? { width: '100%' } : null"
+      />
       <button
         @click="showPengumuman = false"
         class="absolute top-2 right-2 bg-white bg-opacity-80 text-black rounded-full p-1 hover:bg-opacity-100 transition"
@@ -374,21 +379,34 @@ const fetchBanner = async () => {
     const jwtToken = localStorage.getItem("jwt_token");
     if (!jwtToken) throw new Error("No token");
 
+    // Ambil nilai banner
     const { data } = await axios.get(
       "https://bladeware.masmut.dev/api/banner",
-      { headers: { Authorization: jwtToken } } // atau `Bearer ${jwtToken}` jika backend mengharuskan
+      { headers: { Authorization: `Bearer ${jwtToken}` } }
     );
 
-    // Robust ambil nilai: bisa ada di data.data.registered_banner atau langsung di data
     const val = Number(
       data?.data?.registered_banner ?? data?.registered_banner ?? data ?? 1
     );
 
     bannerValue.value = val;
     bannerSrc.value = val === 0 ? bannerNew : bannerLimited;
-
-    // Tampilkan modal banner
     showPengumuman.value = true;
+
+    // Jika masih 0 (first time), ubah ke 1 supaya hanya muncul sekali seumur akun
+    if (val === 0) {
+      try {
+        await axios.patch(
+          "https://bladeware.masmut.dev/api/banner/register",
+          {},
+          { headers: { Authorization: `Bearer ${jwtToken}` } }
+        );
+        // Opsional: kunci state lokal ke 1 agar fetch berikutnya di sesi ini dianggap sudah 1
+        bannerValue.value = 1;
+      } catch (err) {
+        console.error("register banner failed:", err?.response?.data || err);
+      }
+    }
   } catch (e) {
     console.error("fetchBanner error:", e);
     // fallback: tetap tampilkan limited
@@ -396,6 +414,7 @@ const fetchBanner = async () => {
     showPengumuman.value = true;
   }
 };
+
 
 watch(
   () => route.path,
