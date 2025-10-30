@@ -244,6 +244,7 @@ const formattedWelcomeBonus = computed(() =>
   Number(welcomeBonus.value || 0).toFixed(2)
 );
 
+
 const fetchDataBoost = async () => {
   try {
     const jwtToken = localStorage.getItem("jwt_token");
@@ -251,24 +252,27 @@ const fetchDataBoost = async () => {
 
     const { data } = await axios.get(
       "https://bladeware.masmut.dev/api/get-data-boost-apps",
-      {
-        headers: { Authorization: `Bearer ${jwtToken}` },
-      }
+      { headers: { Authorization: `Bearer ${jwtToken}` } }
     );
 
     if (data.status === "success") {
       const info = data.data.info_user;
 
+      // set flag pending
       if (parseFloat(info.saldo) === 0 && parseFloat(info.saldo_beku) > 0) {
         hasPendingData.value = true;
       } else {
         hasPendingData.value = false;
       }
+
+      // <-- TAMBAH: ambil total bonus terdaftar
+      welcomeBonus.value = Number(data?.data?.registered_bonus_total ?? 0);
     }
   } catch (error) {
     console.error("Gagal fetch data boost:", error);
   }
 };
+
 
 const submitProdukPending = async () => {
   try {
