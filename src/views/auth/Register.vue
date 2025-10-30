@@ -244,11 +244,11 @@
           @click="closeModal"
           class="fixed inset-0 flex items-center justify-center bg-black/50"
         >
-          <div class="bg-white p-6 shadow-lg w-[70%] h-[70%] overflow-clip" @click.stop>
+          <div class="bg-white p-6 shadow-lg w-[95%] h-[70%] overflow-clip" @click.stop>
             <div class="relative">
               <button
                 @click="closeModal"
-                class="absolute top-0 right-3 bg-[#ff861b] p-2 text-white rounded-full hover:bg-[#e07b17]"
+                class="absolute -top-2 -right-2 bg-[#ff861b] p-2 text-white rounded-full hover:bg-[#e07b17]"
               >
                 <IconX class="w-3 h-3" />
               </button>
