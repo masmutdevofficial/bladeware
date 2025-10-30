@@ -62,7 +62,7 @@
           <div class="text-center flex flex-col justify-center items-center">
             <p class="text-orange-500">Total Profit</p>
             <p class="text-gray-700">
-              {{ (Number(infoUser.komisi) + 15).toFixed(2) }} USDC
+              {{ (Number(infoUser.komisi)).toFixed(2) }} USDC
             </p>
           </div>
         </div>

@@ -316,25 +316,23 @@
       </div>
     </transition>
   </div>
-  <!-- Modal Gambar Pengumuman -->
+  <!-- Modal Banner Pengumuman -->
   <div
     v-if="showPengumuman"
     class="fixed inset-0 bg-black/30 flex items-center justify-center z-50"
   >
     <div class="relative w-[80%] lg:w-[20%]">
-      <img
-        src="@/assets/img/limited-event.jpg"
-        alt="Limited Event"
-        class="rounded-lg shadow-lg"
-      />
+      <img :src="bannerSrc" alt="Banner" class="rounded-lg shadow-lg" />
       <button
         @click="showPengumuman = false"
         class="absolute top-2 right-2 bg-white bg-opacity-80 text-black rounded-full p-1 hover:bg-opacity-100 transition"
+        aria-label="Close"
       >
         ✕
       </button>
     </div>
   </div>
+
 </template>
 
 <script setup>
@@ -342,7 +340,8 @@ import { ref, computed, watch } from "vue";
 import { IconChevronDown } from "@tabler/icons-vue";
 import { IconX } from "@tabler/icons-vue";
 import whatsappImage from "@/assets/img/whatsapp.png"; // Import gambar
-
+import bannerNew from "@/assets/img/newcommerce.jpeg";
+import bannerLimited from "@/assets/img/limited-event.jpg";
 import { IconMenuDeep } from "@tabler/icons-vue"; // Import ikon dari Tabler
 import DaunJatuh from "@/components/DaunJatuh.vue";
 import { useAppSettingsStore } from "@/stores/appSettings";
@@ -363,9 +362,39 @@ const isLanguageMenuOpen = ref(false);
 const { locale } = useI18n();
 const appSettings = useAppSettingsStore();
 const showPengumuman = ref(false);
+const bannerSrc = ref(bannerLimited); // default
+const bannerValue = ref(null);
 const hasShownThisLogin = ref(false);
 // Deteksi login dari token lokal
 const isLoggedIn = ref(false);
+
+const fetchBanner = async () => {
+  try {
+    const jwtToken = localStorage.getItem("jwt_token");
+    if (!jwtToken) throw new Error("No token");
+
+    const { data } = await axios.get(
+      "https://bladeware.masmut.dev/api/banner",
+      { headers: { Authorization: jwtToken } } // atau `Bearer ${jwtToken}` jika backend mengharuskan
+    );
+
+    // Robust ambil nilai: bisa ada di data.data.registered_banner atau langsung di data
+    const val = Number(
+      data?.data?.registered_banner ?? data?.registered_banner ?? data ?? 1
+    );
+
+    bannerValue.value = val;
+    bannerSrc.value = val === 0 ? bannerNew : bannerLimited;
+
+    // Tampilkan modal banner
+    showPengumuman.value = true;
+  } catch (e) {
+    console.error("fetchBanner error:", e);
+    // fallback: tetap tampilkan limited
+    bannerSrc.value = bannerLimited;
+    showPengumuman.value = true;
+  }
+};
 
 watch(
   () => route.path,
@@ -515,6 +544,11 @@ const toggleLanguageMobile = () => {
 const closeModal = () => {
   showModal.value = false;
 };
+
+onMounted(() => {
+  fetchBanner(); // <= tambahkan ini
+});
+
 </script>
 
 <style scoped>
