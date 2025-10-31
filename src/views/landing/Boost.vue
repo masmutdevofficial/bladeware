@@ -211,7 +211,7 @@
             </div>
             <div class="flex justify-around mb-2">
               <div>
-                <p class="text-orange-500 font-semibold">Total Price</p>
+                <p class="text-orange-500 font-semibold">Unit Price</p>
                 <p class="text-lg">
                   {{ Number(produkData.price).toFixed(2) }} USDC
                 </p>
