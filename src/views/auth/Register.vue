@@ -196,17 +196,21 @@
           <!-- Register button -->
           <div class="mb-0">
             <button
-              @click="register"
               type="button"
-              :disabled="!isChecked"
-              :class="[
-                'inline-block text-white text-sm py-4 px-12 rounded-[10px] shadow-md w-full',
-                isChecked
-                  ? 'bg-[#ff961b] shadow-[rgba(243,174,78,0.52)] hover:opacity-95 cursor-pointer'
-                  : 'bg-gray-300 shadow-none cursor-not-allowed'
-              ]"
+              @click="register"
+              :disabled="!isChecked || isLoading"
+              class="bg-[#ff961b] cursor-pointer flex flex-row text-white text-sm py-4 px-12 rounded-[10px] shadow-md shadow-[rgba(243,174,78,0.52)] w-full items-center justify-center"
+              :class="(!isChecked || isLoading) ? 'opacity-60 cursor-not-allowed' : 'hover:opacity-95'"
             >
-              Register
+              <svg
+                v-if="isLoading"
+                class="animate-spin mr-2 h-5 w-5 text-white"
+                fill="none" viewBox="0 0 24 24" aria-hidden="true"
+              >
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+              </svg>
+              <span>{{ isLoading ? "Creating your account..." : "Register" }}</span>
             </button>
           </div>
 
@@ -331,7 +335,7 @@ export default {
   },
   setup() {
     const router = useRouter();
-
+    const isLoading = ref(false);
     // Identitas: boleh isi salah satu
     const username = ref("");
     const phoneEmail = ref("");
@@ -384,6 +388,9 @@ export default {
         );
         return;
       }
+
+      if (isLoading.value) return; // cegah double submit 
+      isLoading.value = true;
 
       // Minimal salah satu identitas
       const hasIdentity = !!(username.value || phoneEmail.value || emailOnly.value);
@@ -451,11 +458,14 @@ export default {
           error.response?.data?.message || "Registration failed.",
           "error"
         );
+      } finally {
+        isLoading.value = false; // matikan spinner
       }
     };
 
     return {
       // identity
+      isLoading,
       username,
       phoneEmail,
       emailOnly,

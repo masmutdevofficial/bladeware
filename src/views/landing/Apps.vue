@@ -136,7 +136,7 @@
               </div>
               <div class="flex justify-between mt-2 text-sm">
                 <div>
-                  <div class="text-gray-500">Total Price</div>
+                  <div class="text-gray-500">Unit Price</div>
                   <div class="font-semibold">{{ group.total }} USDC</div>
                 </div>
                 <div>
