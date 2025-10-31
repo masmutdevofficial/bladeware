@@ -110,7 +110,7 @@
 
             <!-- Normal Card -->
             <template v-else>
-              <div class="flex items-center justify-between text-sm text-gray-500">
+              <div class="flex items-start justify-between text-sm text-gray-500">
                 <span>{{ group.date }}</span>
                 <div class="flex flex-col justify-end items-end">
                   <!-- Status dengan warna: hijau untuk Succeeded, merah untuk Pending -->

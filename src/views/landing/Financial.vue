@@ -36,67 +36,51 @@
             :key="index"
             class="mb-4"
           >
-            <div
-              class="flex items-center justify-between text-sm text-gray-500"
-            >
-              <span>{{ record.created_at }}</span>
+            <!-- Header: Type di kiri (besar hijau), Time + Status di kanan (sebaris) -->
+            <div class="flex items-start justify-between">
+              <!-- TYPE -->
+              <div class="flex-1 pr-2">
+                <div class="text-green-600 font-semibold text-lg md:text-xl leading-tight">
+                  {{ record.category_deposit || (selectedTab === 'Deposit' ? 'Deposit' : 'Withdrawal') }}
+                </div>
+              </div>
 
-              <div class="flex flex-col items-end justify-end">
-<span class="text-gray-500">
-  {{ record.category_deposit || (selectedTab === "Deposit" ? "Deposit" : "") }}
-</span>
-                <div
-                  class="font-semibold"
+              <!-- TIME + STATUS (sejajar satu baris di kanan) -->
+              <div class="flex items-baseline gap-3">
+                <span class="text-sm text-gray-500">{{ record.created_at }}</span>
+                <span
+                  class="font-semibold leading-none"
                   :class="{
-                    'text-yellow-500': record.status == 0,
-                    'text-green-600': record.status == 1,
-                    'text-red-500': record.status == 2,
+                    'text-yellow-500 text-lg md:text-xl': record.status == 0,
+                    'text-green-600 text-lg md:text-xl': record.status == 1,
+                    'text-red-500 text-lg md:text-xl': record.status == 2,
                   }"
                 >
                   {{
                     record.status == 0
-                      ? "On Process"
+                      ? 'On Process'
                       : record.status == 1
-                      ? "Completed"
+                      ? 'Completed'
                       : record.status == 2
-                      ? "Rejected"
-                      : "-"
+                      ? 'Rejected'
+                      : '-'
                   }}
-                </div>
+                </span>
               </div>
             </div>
 
-            <div class="flex items-center justify-between">
-              <div class="mt-2">
-                <div class="text-sm text-start text-gray-500">Network</div>
-                <div class="font-semibold">{{ record.network_address }}</div>
-              </div>
-
-              <div class="mt-2">
-                <div class="text-sm text-end text-gray-500">Currency</div>
-                <div class="font-semibold">{{ record.currency }}</div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 items-center mt-2">
-              <div>
-                <div class="text-sm text-start text-gray-500">Wallet</div>
-                <div class="font-semibold break-all">
-                  {{ record.wallet_address }}
-                </div>
-              </div>
-
-              <div class="text-right">
-                <div class="text-sm text-gray-500">Amount</div>
-                <div class="font-semibold">
-                  {{ record.amount }} {{ record.currency }}
-                </div>
+            <!-- Amount saja (Network/Wallet/Currency dihapus) -->
+            <div class="mt-3 flex items-center justify-between">
+              <div class="text-sm text-gray-500">Amount</div>
+              <div class="font-semibold">
+                {{ record.amount }} {{ record.currency }}
               </div>
             </div>
 
             <hr class="text-gray-300 my-4" />
           </div>
         </div>
+
         <!-- No Data -->
         <div
           v-else
@@ -196,24 +180,19 @@ const fetchFinance = async () => {
       deposits.value = data.data.deposits || [];
       withdrawals.value = data.data.withdrawals || [];
 
-      // ===== Inject "Welcome Bonus" ke Deposit tab =====
+      // Inject "Welcome Bonus" ke tab Deposit (Completed)
       const wb = data?.data?.welcome_bonus;
       const amount = Number(wb?.amount ?? 0);
       if (amount > 0) {
-        // Item sintetis untuk ditampilkan di daftar Deposit
         deposits.value.unshift({
           id: null,
           created_at: wb?.last_awarded_at || new Date().toISOString(),
-          status: 1, // dianggap Completed
-          network_address: "-",
+          status: 1, // Completed
           currency: "USDC",
-          wallet_address: "-",
           amount: amount,
-          category_deposit: "Welcome Bonus", // <- dipakai di template label
+          category_deposit: "Welcome Bonus",
         });
       }
-      // ================================================
-
     } else if (data.message === "Transaction not found") {
       deposits.value = [];
       withdrawals.value = [];
@@ -228,7 +207,7 @@ const fetchFinance = async () => {
   }
 };
 
-// Computed untuk tab terpilih
+// Records sesuai tab
 const filteredRecords = computed(() => {
   return selectedTab.value === "Deposit" ? deposits.value : withdrawals.value;
 });
