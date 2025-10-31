@@ -15,8 +15,9 @@
         <div class="flex items-center mb-4" v-if="user">
           <img
             alt="User avatar"
-            class="w-12 h-12 rounded-full"
-            src="@/assets/img/tx1.png"
+            class="w-12 h-12 rounded-full cursor-pointer hover:opacity-80"
+            :src="avatarSrc"
+            @click="openAvatarModal"
           />
           <div class="ml-4">
             <p class="text-gray-700 font-semibold">Hi, {{ user.name }}</p>
@@ -535,6 +536,57 @@
             </div>
           </transition>
 
+          <!-- Modal Upload Avatar -->
+          <transition name="fade">
+            <div
+              v-if="showAvatarModal"
+              class="fixed inset-0 bg-black/30 z-50 flex items-center justify-center"
+              @click="closeAvatarModal"
+            >
+              <div class="bg-white w-[90%] max-w-md rounded-lg p-6" @click.stop>
+                <div class="flex justify-between items-center mb-4">
+                  <h2 class="text-lg font-semibold text-gray-800">Upload Profile Photo</h2>
+                  <button @click="closeAvatarModal" class="text-gray-500 hover:text-gray-700">
+                    <IconX class="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div class="flex flex-col items-center">
+                  <!-- Preview -->
+                  <img
+                    :src="previewUrl || avatarSrc"
+                    alt="Preview"
+                    class="w-32 h-32 rounded-full object-cover border mb-4"
+                  />
+
+                  <!-- File input -->
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    @change="onFileChange"
+                    class="w-full border p-2 rounded"
+                  />
+                  <p class="text-red-500 text-xs mt-2">
+                    Only PNG, JPEG, JPG, WEBP. Max size 2 MB.
+                  </p>
+
+                  <!-- Error -->
+                  <p v-if="uploadError" class="text-red-600 text-sm mt-2">{{ uploadError }}</p>
+                </div>
+
+                <button
+                  :disabled="!selectedFile || uploadError || uploading"
+                  @click="uploadAvatar"
+                  class="mt-6 w-full py-2 rounded-md text-white"
+                  :class="(!selectedFile || uploadError || uploading) ? 'bg-gray-300 cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-600'"
+                >
+                  <span v-if="uploading">Uploading...</span>
+                  <span v-else>Upload</span>
+                </button>
+              </div>
+            </div>
+          </transition>
+
           <!-- Apps Records -->
           <router-link
             class="flex justify-between items-center cursor-pointer"
@@ -650,6 +702,7 @@ import {
 } from "@tabler/icons-vue";
 import { ref, onMounted,computed } from "vue";
 import axios from "axios";
+import defaultAvatar from "@/assets/img/tx1.png";
 
 // State
 const showLoginPassword = ref(false);
@@ -703,6 +756,126 @@ const networks = ["ERC-20", "SOL", "Polygon", "BTC"];
 const currencies = ["Paypal USD", "USDC", "ETH", "BTC"];
 
 const isWalletBound = ref(false);
+
+const showAvatarModal = ref(false);
+const selectedFile = ref(null);
+const previewUrl = ref("");
+const uploadError = ref("");
+const uploading = ref(false);
+const avatarSrc = computed(() => {
+  const urlFromApi = (user.value && (user.value.profile_url || user.value.profile)) || "";
+  return urlFromApi || defaultAvatar;
+});
+
+const openAvatarModal = () => {
+  showAvatarModal.value = true;
+  uploadError.value = "";
+  if (previewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value);
+    previewUrl.value = "";
+  }
+  selectedFile.value = null;
+};
+
+const closeAvatarModal = () => {
+  showAvatarModal.value = false;
+  if (previewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value);
+    previewUrl.value = "";
+  }
+  selectedFile.value = null;
+  uploadError.value = "";
+};
+
+const onFileChange = (e) => {
+  uploadError.value = "";
+  const input = e && e.target;
+  const file = input && input.files && input.files[0];
+
+  if (!file) {
+    selectedFile.value = null;
+    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
+    previewUrl.value = "";
+    return;
+  }
+
+  const allowed = ["image/png", "image/jpeg", "image/webp"];
+  if (!allowed.includes(file.type)) {
+    uploadError.value = "Unsupported file type.";
+    selectedFile.value = null;
+    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
+    previewUrl.value = "";
+    return;
+  }
+
+  const max = 2 * 1024 * 1024; // 2 MB
+  if (file.size > max) {
+    uploadError.value = "File is too large. Max 2 MB.";
+    selectedFile.value = null;
+    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
+    previewUrl.value = "";
+    return;
+  }
+
+  selectedFile.value = file;
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
+  previewUrl.value = URL.createObjectURL(file);
+};
+
+const uploadAvatar = async () => {
+  if (!selectedFile.value) {
+    uploadError.value = "Please choose a file.";
+    return;
+  }
+
+  try {
+    uploading.value = true;
+    const jwtToken = localStorage.getItem("jwt_token");
+    if (!jwtToken) throw new Error("JWT Token not found!");
+
+    const fd = new FormData();
+    fd.append("profile", selectedFile.value);
+
+    const { data } = await axios.post(
+      "https://bladeware.masmut.dev/api/upload-avatar",
+      fd,
+      {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    if (data && data.status === "success") {
+      showAlert("Avatar uploaded successfully!", "success");
+
+      const url =
+        (data.data && (data.data.profile_url || data.data.url)) ||
+        data.profile ||
+        data.path ||
+        "";
+
+      if (url) {
+        user.value = Object.assign({}, user.value || {}, { profile_url: url });
+      } else if (previewUrl.value) {
+        user.value = Object.assign({}, user.value || {}, { profile_url: previewUrl.value });
+      }
+
+      closeAvatarModal();
+    } else {
+      showAlert((data && data.message) || "Upload failed.", "error");
+    }
+  } catch (err) {
+    const msg =
+      (err && err.response && (err.response.data && (err.response.data.message || err.response.data.error))) ||
+      err.message ||
+      "Unknown error";
+    showAlert(`Upload failed: ${msg}`, "error");
+  } finally {
+    uploading.value = false;
+  }
+};
 
 // Helpers
 const showAlert = (message, type = "error") => {
