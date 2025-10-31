@@ -54,7 +54,7 @@
                   :key="record.id"
                   class="flex items-center justify-between py-3"
                 >
-                  <div class="flex items-center">
+                  <div class="flex flex-col items-center">
                     <img
                       :alt="record.name + ' logo'"
                       class="w-10 h-10 rounded-full"
@@ -72,7 +72,7 @@
                     </span>
                   </div>
                   <div class="text-right min-w-[120px]">
-                    <div class="text-gray-500">Total Price</div>
+                    <div class="text-gray-500">Unit Price</div>
                     <div class="font-semibold">{{ record.total }} USDC</div>
                     <div class="text-gray-500">Profit</div>
                     <div class="font-semibold">{{ record.profit }} USDC</div>
