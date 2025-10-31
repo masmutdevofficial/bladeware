@@ -35,9 +35,9 @@
         <div v-if="groupedRecords.length">
           <div
             v-for="(group, index) in groupedRecords"
-            :key="group.id || group.id"
+            :key="group.id || index"
             :class="[
-              'bg-white mb-4  border-b border-black py-5 px-5 lg:py-5 lg:px-5 rounded-lg',
+              'bg-white mb-4 border-b border-black py-5 px-5 lg:py-5 lg:px-5 rounded-lg',
               group.type === 'combination'
                 ? 'mb-4 mt-4 pb-0'
                 : index === groupedRecords.length - 1
@@ -48,21 +48,37 @@
           >
             <!-- Combination Card -->
             <template v-if="group.type === 'combination'">
+              <!-- Header status + timestamp sejajar seperti normal -->
+              <div class="flex items-center justify-between text-sm text-gray-500">
+                <span v-if="group.groupStatus === 0">{{ group.groupDate }}</span>
+                <div class="flex flex-col justify-end items-end">
+                  <div
+                    class="font-semibold"
+                    :class="{
+                      'text-green-600': group.groupStatus === 0,
+                      'text-red-500': group.groupStatus !== 0,
+                    }"
+                  >
+                    {{ group.groupStatus === 0 ? 'Succeeded' : 'Pending' }}
+                  </div>
+                </div>
+              </div>
+
               <div class="divide-y divide-gray-100">
                 <div
                   v-for="(record, cidx) in group.records"
-                  :key="record.id"
-                  class="flex items-center justify-between py-3"
+                  :key="record.id + '-' + cidx"
+                  class="py-3"
                 >
-                  <div class="flex flex-col items-center">
+                  <!-- Baris gambar + nama -->
+                  <div class="flex items-center">
                     <img
                       :alt="record.name + ' logo'"
                       class="w-10 h-10 rounded-full"
                       height="40"
                       :src="
                         record.logo
-                          ? 'https://bladeware.masmut.dev/uploads/products/' +
-                            record.logo
+                          ? 'https://bladeware.masmut.dev/uploads/products/' + record.logo
                           : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
                       "
                       width="40"
@@ -71,14 +87,22 @@
                       {{ record.name }}
                     </span>
                   </div>
-                  <div class="text-right min-w-[120px]">
-                    <div class="text-gray-500">Unit Price</div>
-                    <div class="font-semibold">{{ record.total }} USDC</div>
-                    <div class="text-gray-500">Profit</div>
-                    <div class="font-semibold">{{ record.profit }} USDC</div>
-                    <div class="text-xs text-gray-500">
-                      Upload Profit Ratio: {{ record.boosted_ratio }}
+
+                  <!-- Unit Price & Profit diletakkan di bawah gambar & nama (seperti normal) -->
+                  <div class="flex justify-between mt-2 text-sm">
+                    <div>
+                      <div class="text-gray-500">Unit Price</div>
+                      <div class="font-semibold">{{ record.total }} USDC</div>
                     </div>
+                    <div>
+                      <div class="text-gray-500">Profit</div>
+                      <div class="font-semibold">{{ record.profit }} USDC</div>
+                    </div>
+                  </div>
+
+                  <!-- Ratio -->
+                  <div class="text-xs text-gray-500 mt-1">
+                    Upload Profit Ratio: {{ record.boosted_ratio }}
                   </div>
                 </div>
               </div>
@@ -86,21 +110,27 @@
 
             <!-- Normal Card -->
             <template v-else>
-              <div
-                class="flex items-center justify-between text-sm text-gray-500"
-              >
+              <div class="flex items-center justify-between text-sm text-gray-500">
                 <span>{{ group.date }}</span>
                 <div class="flex flex-col justify-end items-end">
-                  <span class="text-gray-500">
+                  <!-- Status dengan warna: hijau untuk Succeeded, merah untuk Pending -->
+                  <div
+                    class="font-semibold"
+                    :class="{
+                      'text-green-600': group.status == 0,
+                      'text-red-500': group.status != 0 && !(hasPendingData && index === 0),
+                    }"
+                  >
                     {{
                       group.status == 0
-                        ? "Succeded"
+                        ? 'Succeeded'
                         : hasPendingData && index === 0
-                        ? ""
-                        : "Pending"
+                        ? ''
+                        : 'Pending'
                     }}
-                  </span>
-                  <!-- Submit button hanya untuk index pertama -->
+                  </div>
+
+                  <!-- Submit button hanya utk index pertama yang pending -->
                   <div
                     v-if="hasPendingData && index === 0"
                     class="flex justify-center mt-4 mb-4"
@@ -112,11 +142,13 @@
                       Submit
                     </button>
                   </div>
+
                   <div class="text-xs text-gray-500">
                     Upload Profit Ratio: {{ group.boosted_ratio }}
                   </div>
                 </div>
               </div>
+
               <div class="flex items-center mt-2">
                 <img
                   :alt="group.name + ' logo'"
@@ -124,8 +156,7 @@
                   height="40"
                   :src="
                     group.logo
-                      ? 'https://bladeware.masmut.dev/uploads/products/' +
-                        group.logo
+                      ? 'https://bladeware.masmut.dev/uploads/products/' + group.logo
                       : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
                   "
                   width="40"
@@ -134,6 +165,7 @@
                   {{ group.name }}
                 </span>
               </div>
+
               <div class="flex justify-between mt-2 text-sm">
                 <div>
                   <div class="text-gray-500">Unit Price</div>
@@ -147,6 +179,7 @@
             </template>
           </div>
         </div>
+
         <!-- No Data -->
         <div
           v-else
@@ -246,7 +279,6 @@ const fetchDataBoost = async () => {
 
     if (data.status === "success") {
       const info = data.data.info_user;
-
       if (parseFloat(info.saldo) === 0 && parseFloat(info.saldo_beku) > 0) {
         hasPendingData.value = true;
       } else {
@@ -362,33 +394,35 @@ const filteredRecords = computed(() => {
   return [];
 });
 
-// Gabungkan combination ke dalam satu card
+// Gabungkan combination ke dalam satu card + siapkan status & timestamp
 const groupedRecords = computed(() => {
   const result = [];
   let combinationGroup = [];
+
+  const pushCombinationGroup = () => {
+    if (!combinationGroup.length) return;
+    // Status grup: jika ada salah satu pending (status != 0) maka group dianggap Pending
+    const groupStatus = combinationGroup.some((r) => r.status != 0) ? 1 : 0;
+    const groupDate = combinationGroup[0]?.date || "";
+    result.push({
+      type: "combination",
+      records: combinationGroup,
+      id: "combination-" + combinationGroup[0].id,
+      groupStatus,
+      groupDate,
+    });
+    combinationGroup = [];
+  };
 
   for (const record of filteredRecords.value) {
     if (record.type === "combination") {
       combinationGroup.push(record);
     } else {
-      if (combinationGroup.length) {
-        result.push({
-          type: "combination",
-          records: combinationGroup,
-          id: "combination-" + combinationGroup[0].id,
-        });
-        combinationGroup = [];
-      }
+      pushCombinationGroup();
       result.push(record);
     }
   }
-  if (combinationGroup.length) {
-    result.push({
-      type: "combination",
-      records: combinationGroup,
-      id: "combination-" + combinationGroup[0].id,
-    });
-  }
+  pushCombinationGroup();
   return result;
 });
 
