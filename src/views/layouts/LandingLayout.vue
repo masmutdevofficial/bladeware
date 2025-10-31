@@ -44,13 +44,13 @@
         >
           {{ $t("example-study") }}
         </router-link>
-        <!-- <router-link
+        <router-link
           v-if="isLoggedIn"
           class="text-black text-sm cursor-pointer font-normal hover:text-[#ff961b] hover:scale-110 transition-transform duration-500 inline-block"
           to="/profile"
         >
           {{ $t("profile") }}
-        </router-link> -->
+        </router-link>
       </nav>
 
       <!-- ICON MENU (Muncul saat layar < 700px) -->
@@ -96,14 +96,14 @@
           >
             {{ $t("limited_event") }}
           </span>
-          <!-- <router-link
+          <router-link
             v-if="isLoggedIn"
             class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
             to="/profile"
             @click="closeMenu"
           >
             {{ $t("profile") }}
-          </router-link> -->
+          </router-link>
           <router-link
             class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
             to="/about"
