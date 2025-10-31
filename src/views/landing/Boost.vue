@@ -17,7 +17,7 @@
           <!-- Avatar -->
           <img
             alt="User avatar"
-            src="@/assets/img/tx1.png"
+            :src="avatarUrl"
             class="rounded-full mb-4"
             width="100"
             height="100"
@@ -262,6 +262,7 @@
 import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import axios from "axios";
 import imgSrc from "@/assets/img/icon-all-bladeware.png";
+import defaultAvatar from "@/assets/img/tx1.png";
 
 const imgHeight = 250;
 const isAnimated = ref(true);
@@ -269,7 +270,7 @@ const translateY = ref(0);
 const maskProgress = ref(-1); // default -1 supaya gambar berwarna tidak muncul sama sekali di awal
 let sliderTimeoutId = null;
 let maskIntervalId = null;
-
+const avatarUrl = ref(defaultAvatar);
 const images = [imgSrc, imgSrc];
 
 function startMaskAnimation(cb) {
@@ -494,28 +495,35 @@ const fetchProfileData = async () => {
 
     const { data } = await axios.get(
       "https://bladeware.masmut.dev/api/get-data-boost",
-      {
-        headers: {
-          Authorization: `${token}`,
-        },
-      }
+      { headers: { Authorization: `${token}` } }
     );
 
     if (data.status === "success") {
       const user = data.data.user;
       const infoUser = data.data.info_user;
 
+      // set teks
       phone_email.value = user.name;
       totaBalanceProfil.value = parseFloat(infoUser.saldo);
       todaysProfit.value = parseFloat(infoUser.komisi);
+
+      // set avatar (utama pakai profile_url, fallback profile->/storage, lalu default)
+      const fromApiUrl = user.profile_url || "";
+      const fromProfilePath = user.profile || "";
+      if (fromApiUrl) {
+        avatarUrl.value = fromApiUrl;
+      } else if (fromProfilePath) {
+        // pastikan mengarah ke /storage/...
+        const clean = String(fromProfilePath).replace(/^\/+/, "");
+        avatarUrl.value = `https://bladeware.masmut.dev/storage/${clean.replace(/^storage\//, "")}`;
+      } else {
+        avatarUrl.value = defaultAvatar;
+      }
     } else {
       console.warn("Failed to load profile data:", data.message);
     }
   } catch (err) {
-    console.error(
-      "Error fetching profile data:",
-      err?.response?.data?.message || err.message
-    );
+    console.error("Error fetching profile data:", err?.response?.data?.message || err.message);
   }
 };
 
