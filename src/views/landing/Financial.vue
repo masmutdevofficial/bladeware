@@ -42,11 +42,8 @@
               <span>{{ record.created_at }}</span>
 
               <div class="flex flex-col items-end justify-end">
-<span class="text-gray-500">
-  {{ record.category_deposit || (selectedTab === "Deposit" ? "Deposit" : "") }}
-</span>
                 <div
-                  class="font-semibold"
+                  class="font-semibold text-lg"
                   :class="{
                     'text-yellow-500': record.status == 0,
                     'text-green-600': record.status == 1,
@@ -67,32 +64,24 @@
             </div>
 
             <div class="flex items-center justify-between">
-              <div class="mt-2">
-                <div class="text-sm text-start text-gray-500">Network</div>
-                <div class="font-semibold">{{ record.network_address }}</div>
-              </div>
-
-              <div class="mt-2">
-                <div class="text-sm text-end text-gray-500">Currency</div>
-                <div class="font-semibold">{{ record.currency }}</div>
-              </div>
+                <span class="text-green-600 text-lg font-semibold">
+                  {{ record.category_deposit || (selectedTab === "Deposit" ? "Deposit" : "") }}
+                </span>
+                <div class="flex flex-col items-center mt-2">
+                  <div class="mt-2">
+                    <div class="text-sm text-right text-gray-500">Currency</div>
+                    <div class="font-semibold text-right">{{ record.currency }}</div>
+                  </div>
+                  <div class="mt-2">
+                    <div class="text-sm text-right text-gray-500">Amount</div>
+                    <div class="font-semibold text-right">
+                      {{ record.amount }} {{ record.currency }}
+                    </div>
+                  </div>
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 items-center mt-2">
-              <div>
-                <div class="text-sm text-start text-gray-500">Wallet</div>
-                <div class="font-semibold break-all">
-                  {{ record.wallet_address }}
-                </div>
-              </div>
 
-              <div class="text-right">
-                <div class="text-sm text-gray-500">Amount</div>
-                <div class="font-semibold">
-                  {{ record.amount }} {{ record.currency }}
-                </div>
-              </div>
-            </div>
 
             <hr class="text-gray-300 my-4" />
           </div>

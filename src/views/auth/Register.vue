@@ -357,8 +357,9 @@ export default {
     const alert = ref({ message: "", type: "success" });
     const showAlert = (message, type = "error") => {
       alert.value = { message, type };
-      setTimeout(() => (alert.value.message = ""), 3000);
+      setTimeout(() => (alert.value.message = ""), 5000);
     };
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
     // toggles
     const showLoginPassword = ref(false);
@@ -382,24 +383,19 @@ export default {
     const register = async () => {
       // Wajib setuju
       if (!isChecked.value) {
-        showAlert(
-          "You must agree to the user agreement and privacy policy.",
-          "error"
-        );
+        showAlert("You must agree to the user agreement and privacy policy.", "error");
         return;
       }
 
-      if (isLoading.value) return; // cegah double submit 
-      isLoading.value = true;
+      if (isLoading.value) return; // cegah double submit
 
-      // Minimal salah satu identitas
+      // ===== Validasi dulu, sebelum set isLoading =====
       const hasIdentity = !!(username.value || phoneEmail.value || emailOnly.value);
       if (!hasIdentity) {
         showAlert("Isi salah satu: username / phone number / email.", "error");
         return;
       }
 
-      // Jika diisi, validasi formatnya
       if (emailOnly.value && !isValidEmail(emailOnly.value)) {
         showAlert("Format email tidak valid.", "error");
         return;
@@ -409,7 +405,6 @@ export default {
         return;
       }
 
-      // Validasi field wajib lainnya
       if (
         !loginPassword.value ||
         !confirmLoginPassword.value ||
@@ -430,6 +425,9 @@ export default {
         showAlert("Withdrawal passwords do not match.", "error");
         return;
       }
+      // ================================================
+
+      isLoading.value = true; // mulai tampil "Creating Your Workbench"
 
       try {
         const payload = {
@@ -441,23 +439,36 @@ export default {
           referral: referralCode.value,
         };
 
-        const response = await axios.post(
-          "https://bladeware.masmut.dev/api/register",
-          payload,
-          { headers: { "Content-Type": "application/json" } }
-        );
+        // Jalankan request + tunggu MINIMAL 5 detik sebelum tampilkan notifikasi
+        let resp = null;
+        let err = null;
 
-        if (response.data.status === "success") {
+        await Promise.all([
+          axios
+            .post("https://bladeware.masmut.dev/api/register", payload, {
+              headers: { "Content-Type": "application/json" },
+            })
+            .then((r) => (resp = r))
+            .catch((e) => (err = e)),
+          wait(3000), // paksa loading min. 3 detik
+        ]);
+
+        if (err) {
+          const msg = err?.response?.data?.message || "Registration failed.";
+          showAlert(msg, "error");
+          return;
+        }
+
+        if (resp?.data?.status === "success") {
           showAlert("Registration successful!", "success");
           setTimeout(() => router.push("/login"), 3000);
         } else {
-          showAlert(response.data.message || "Registration failed.", "error");
+          showAlert(resp?.data?.message || "Registration failed.", "error");
         }
-      } catch (error) {
-        showAlert(
-          error.response?.data?.message || "Registration failed.",
-          "error"
-        );
+      } catch {
+        // fallback
+        await wait(5000); // jaga-jaga tetap minimal 5 detik (kalau belum terpenuhi)
+        showAlert("Registration failed.", "error");
       } finally {
         isLoading.value = false; // matikan spinner
       }

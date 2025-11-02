@@ -49,7 +49,7 @@
             <!-- Combination Card -->
             <template v-if="group.type === 'combination'">
               <!-- Header status + timestamp sejajar seperti normal -->
-              <div class="flex items-center justify-between text-sm text-gray-500">
+              <div class="flex items-center justify-end text-sm text-gray-500">
                 <span v-if="group.groupStatus === 0">{{ group.groupDate }}</span>
                 <div class="flex flex-col justify-end items-end">
                   <div
@@ -60,6 +60,10 @@
                     }"
                   >
                     {{ group.groupStatus === 0 ? 'Succeeded' : 'Pending' }}
+                  </div>
+                                    <!-- Ratio -->
+                  <div class="text-xs text-gray-500 mt-1">
+                    Upload Profit Ratio: {{ group.records.length ? group.records[0].boosted_ratio : '-' }}
                   </div>
                 </div>
               </div>
@@ -98,11 +102,6 @@
                       <div class="text-gray-500">Profit</div>
                       <div class="font-semibold">{{ record.profit }} USDC</div>
                     </div>
-                  </div>
-
-                  <!-- Ratio -->
-                  <div class="text-xs text-gray-500 mt-1">
-                    Upload Profit Ratio: {{ record.boosted_ratio }}
                   </div>
                 </div>
               </div>

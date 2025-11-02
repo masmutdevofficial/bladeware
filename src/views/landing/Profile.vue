@@ -12,14 +12,25 @@
       class="relative z-10 bg-white h-max mt-[30px] py-5 px-5 lg:py-5 lg:px-5 rounded-lg flex flex-col items-center md:flex-row md:justify-between w-[95%] lg:w-200 bg-opacity-90"
     >
       <div class="flex flex-col justify-center w-full">
-        <div class="flex items-center mb-4" v-if="user">
-          <img
-            alt="User avatar"
-            class="w-12 h-12 rounded-full cursor-pointer hover:opacity-80"
-            :src="avatarSrc"
-            @click="openAvatarModal"
-          />
-          <div class="ml-4">
+        <div class="flex items-start mb-4" v-if="user">
+          <!-- Avatar + tombol Edit -->
+          <div class="flex flex-col items-center mt-1">
+            <img
+              alt="User avatar"
+              class="w-12 h-12 rounded-full"
+              :src="avatarSrc"
+            />
+            <button
+              type="button"
+              class="mt-3 text-xs text-orange-600 hover:text-orange-700"
+              @click="openAvatarModal"
+            >
+              Edit
+            </button>
+          </div>
+
+          <!-- Detail user -->
+          <div class="ml-4 self-start">
             <p class="text-gray-700 font-semibold">Hi, {{ user.name }}</p>
             <p class="text-gray-500 text-sm">
               Phone Number:
@@ -31,12 +42,11 @@
             </p>
             <p class="text-gray-500 text-sm">
               Referral:
-              <span class="text-orange-500 text-sm">{{
-                user.referral || "-"
-              }}</span>
+              <span class="text-orange-500 text-sm">{{ user.referral || "-" }}</span>
             </p>
           </div>
         </div>
+
 
         <!-- Credibility Progress -->
         <div class="flex items-center w-full" v-if="user">
@@ -559,19 +569,57 @@
                     class="w-32 h-32 rounded-full object-cover border mb-4"
                   />
 
-                  <!-- File input -->
-                  <input
-                    type="file"
-                    accept="image/png,image/jpeg,image/webp"
-                    @change="onFileChange"
-                    class="w-full border p-2 rounded"
-                  />
-                  <p class="text-red-500 text-xs mt-2">
-                    Only PNG, JPEG, JPG, WEBP. Max size 2 MB.
-                  </p>
+<!-- File input (center saat belum pilih, otomatis ke pinggir saat sudah pilih) -->
+<div class="w-full mt-2">
+  <!-- Hidden real input -->
+  <input
+    id="avatarFile"
+    type="file"
+    accept="image/png,image/jpeg,image/webp"
+    @change="onFileChange"
+    class="sr-only"
+  />
 
-                  <!-- Error -->
-                  <p v-if="uploadError" class="text-red-600 text-sm mt-2">{{ uploadError }}</p>
+  <!-- Row: center jika belum pilih, kiri jika sudah -->
+  <div
+    :class="[
+      'flex w-full items-center gap-3',
+      selectedFile ? 'justify-start' : 'justify-center'
+    ]"
+  >
+    <!-- Trigger button -->
+    <label
+      for="avatarFile"
+      class="inline-flex items-center px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600 cursor-pointer"
+    >
+      Choose File
+    </label>
+
+    <!-- Filename (muncul setelah user memilih file) -->
+    <span
+      v-if="selectedFile"
+      class="text-sm text-gray-700 truncate max-w-[60%]"
+    >
+      {{ selectedFile.name }}
+    </span>
+  </div>
+
+  <!-- Keterangan & error: center saat belum pilih, kiri saat sudah -->
+  <p
+    class="text-red-500 text-xs mt-2"
+    :class="selectedFile ? 'text-left' : 'text-center'"
+  >
+    Only PNG, JPEG, JPG, WEBP. Max size 2 MB.
+  </p>
+  <p
+    v-if="uploadError"
+    class="text-red-600 text-sm mt-2"
+    :class="selectedFile ? 'text-left' : 'text-center'"
+  >
+    {{ uploadError }}
+  </p>
+</div>
+
                 </div>
 
                 <button
@@ -970,15 +1018,24 @@ const bindWallet = async () => {
     );
 
     if (data.status === "success") {
+      // tampilkan alert sukses
       showAlert("Wallet successfully bound!", "success");
+
+      // tutup modal
       showWalletForm.value = false;
+
+      // tunggu sampai alert selesai (showAlert pakai 3000 ms)
+      await new Promise((r) => setTimeout(r, 3200));
+
+      // refresh halaman
+      window.location.reload();
     } else {
       showAlert(data.message || "Failed to bind wallet.");
     }
   } catch (error) {
     const errorMessage =
       error.response?.data?.message ||
-      error.response?.data?.error || // Tambahan ini
+      error.response?.data?.error ||
       error.message ||
       "Unknown error";
     console.error("Bind Wallet error:", errorMessage);
@@ -986,9 +1043,10 @@ const bindWallet = async () => {
   }
 };
 
+
 const requestWithdrawal = async () => {
   if (!wdWallet.value || !wdPassword.value || !amount.value) {
-    showAlert("Please fill in all required fields!");
+    showAlert("Bind Your Wallet First !");
     return;
   }
 
