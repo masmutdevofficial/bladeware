@@ -133,12 +133,12 @@
             {{ $t("example-study") }}
           </router-link>
 
-          <div class="w-full">
+          <div class="w-full mt-3">
             <!-- Jika sudah login -->
             <button
               v-if="isLoggedIn"
               @click="logout"
-              class="text-black mt-3 font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
+              class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
             >
               {{ $t("logout") }}
             </button>
@@ -147,7 +147,7 @@
             <router-link
               v-else
               @click="closeMenu"
-              class="text-black mt-3 font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
+              class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
               to="/login"
             >
               {{ $t("login-register") }}
@@ -346,8 +346,8 @@ import axios from "axios";
 import { IconChevronDown } from "@tabler/icons-vue";
 import { IconX } from "@tabler/icons-vue";
 import whatsappImage from "@/assets/img/whatsapp.png"; // Import gambar
-import bannerNew from "@/assets/img/bladeware-register-bonus.png";
-import bannerLimited from "@/assets/img/bladeware-limited-event.png";
+import bannerNew from "@/assets/img/newcommerce.jpeg";
+import bannerLimited from "@/assets/img/limited-event.jpg";
 import { IconMenuDeep } from "@tabler/icons-vue"; // Import ikon dari Tabler
 import DaunJatuh from "@/components/DaunJatuh.vue";
 import { useAppSettingsStore } from "@/stores/appSettings";
