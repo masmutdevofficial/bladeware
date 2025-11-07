@@ -81,7 +81,7 @@
 
                 <div class="mt-2 text-sm text-right text-gray-500">Amount</div>
                 <div class="font-semibold text-right">
-                  {{ record.amount }}
+                  {{ formatAmount(record.amount) }}
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@
 
                 <div class="mt-2 text-sm text-right text-gray-500">Amount</div>
                 <div class="font-semibold text-right">
-                  {{ record.amount }} {{ record.currency }}
+                  {{ formatAmount(record.amount) }} {{ record.currency }}
                 </div>
               </div>
             </div>

@@ -67,7 +67,7 @@
                 :class="windowWidth <= 380 ? 'text-[15px]' : ''"
                 style="word-break: break-all"
               >
-                {{ Number(balance).toFixed(2) }} USDC
+                {{ formatAmount(balance) }} USDC
               </p>
             </div>
             <div class="flex flex-col items-center min-w-0">
@@ -77,7 +77,7 @@
                 :class="windowWidth <= 380 ? 'text-[15px]' : ''"
                 style="word-break: break-all"
               >
-                {{ Number(todaysProfit).toFixed(2) }} USDC
+                {{ formatAmount(todaysProfit) }} USDC
               </p>
             </div>
           </div>
@@ -101,7 +101,7 @@
               v-if="priceAkhir > 0"
             >
               <p class="text-red-600 font-semibold text-sm">
-                Pending {{ Number(minusSekarang).toFixed(2) }} USDC
+                Pending {{ formatAmount(minusSekarang) }} USDC
               </p>
             </div>
 
@@ -213,12 +213,12 @@
               <div>
                 <p class="text-orange-500 font-semibold">Unit Price</p>
                 <p class="text-lg">
-                  {{ Number(produkData.price).toFixed(2) }} USDC
+                  {{ formatAmount(produkData.price) }} USDC
                 </p>
               </div>
               <div>
                 <p class="text-orange-500 font-semibold">Profit</p>
-                <p class="text-lg">{{ produkData.profit }} USDC</p>
+                <p class="text-lg">{{ formatAmount(produkData.profit) }} USDC</p>
               </div>
             </div>
             <button
