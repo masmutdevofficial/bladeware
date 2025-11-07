@@ -50,15 +50,15 @@
                     'text-red-500': record.status == 2,
                   }"
                 >
-                  {{
-                    record.status == 0
-                      ? 'In Process'
-                      : record.status == 1
-                      ? 'Completed'
-                      : record.status == 2
-                      ? 'Rejected'
-                      : '-'
-                  }}
+                {{
+                  record.status == 0
+                    ? 'In Process'
+                    : record.status == 1
+                    ? 'Approved'
+                    : record.status == 2
+                    ? 'Rejected'
+                    : '-'
+                }}
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@
 
                 <div class="mt-2 text-sm text-right text-gray-500">Amount</div>
                 <div class="font-semibold text-right">
-                  {{ record.amount }} {{ record.currency }}
+                  {{ record.amount }}
                 </div>
               </div>
             </div>
