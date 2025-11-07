@@ -52,40 +52,79 @@
                 >
                   {{
                     record.status == 0
-                      ? "On Process"
+                      ? 'In Process'
                       : record.status == 1
-                      ? "Completed"
+                      ? 'Completed'
                       : record.status == 2
-                      ? "Rejected"
-                      : "-"
+                      ? 'Rejected'
+                      : '-'
                   }}
                 </div>
               </div>
             </div>
 
-            <div class="flex items-center justify-between">
-                <span class="text-green-600 text-lg font-semibold">
-                  {{ record.category_deposit || (selectedTab === "Deposit" ? "Deposit" : "") }}
-                </span>
-                <div class="flex flex-col items-center mt-2">
-                  <div class="mt-2">
-                    <div class="text-sm text-right text-gray-500">Currency</div>
-                    <div class="font-semibold text-right">{{ record.currency }}</div>
-                  </div>
-                  <div class="mt-2">
-                    <div class="text-sm text-right text-gray-500">Amount</div>
-                    <div class="font-semibold text-right">
-                      {{ record.amount }} {{ record.currency }}
-                    </div>
-                  </div>
+            <!-- CONTENT ROW -->
+            <!-- Deposit: tetap seperti semula -->
+            <div
+              v-if="selectedTab === 'Deposit'"
+              class="flex items-center justify-between"
+            >
+              <span class="text-green-600 text-lg font-semibold">
+                {{ record.category_deposit || 'Deposit' }}
+              </span>
+
+              <div class="flex flex-col items-center mt-2">
+                <div class="text-sm text-right text-gray-500">Currency</div>
+                <div class="font-semibold text-right">
+                  {{ record.currency || '-' }}
                 </div>
+
+                <div class="mt-2 text-sm text-right text-gray-500">Amount</div>
+                <div class="font-semibold text-right">
+                  {{ record.amount }} {{ record.currency }}
+                </div>
+              </div>
             </div>
 
+            <!-- Withdrawal: kiri (Network & Wallet), kanan (Currency & Amount) -->
+            <div
+              v-else
+              class="grid grid-cols-2 gap-4 items-start"
+            >
+              <!-- Kiri -->
+              <div class="flex flex-col">
+                <div class="text-sm text-gray-500">Network</div>
+                <div class="font-semibold">
+                  {{ record.network_address || '-' }}
+                </div>
 
+                <div class="mt-2 text-sm text-gray-500">Wallet Address</div>
+                <div
+                  class="font-mono text-xs break-all max-w-[16rem] lg:max-w-[22rem]"
+                  :title="record.wallet_address"
+                >
+                  {{ record.wallet_address || '-' }}
+                </div>
+              </div>
+
+              <!-- Kanan -->
+              <div class="flex flex-col items-end">
+                <div class="text-sm text-right text-gray-500">Currency</div>
+                <div class="font-semibold text-right">
+                  {{ record.currency || '-' }}
+                </div>
+
+                <div class="mt-2 text-sm text-right text-gray-500">Amount</div>
+                <div class="font-semibold text-right">
+                  {{ record.amount }} {{ record.currency }}
+                </div>
+              </div>
+            </div>
 
             <hr class="text-gray-300 my-4" />
           </div>
         </div>
+
         <!-- No Data -->
         <div
           v-else
@@ -153,76 +192,73 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import axios from "axios";
+import { ref, computed, onMounted } from 'vue'
+import axios from 'axios'
 
 // Tabs
-const tabs = ["Deposit", "Withdrawal"];
-const selectedTab = ref("Deposit");
+const tabs = ['Deposit', 'Withdrawal']
+const selectedTab = ref('Deposit')
 
 // Alert
-const alert = ref({ message: "", type: "success" });
-const showAlert = (message, type = "error") => {
-  alert.value = { message, type };
-  setTimeout(() => (alert.value.message = ""), 3000);
-};
+const alert = ref({ message: '', type: 'success' })
+const showAlert = (message, type = 'error') => {
+  alert.value = { message, type }
+  setTimeout(() => (alert.value.message = ''), 3000)
+}
 
 // Data
-const deposits = ref([]);
-const withdrawals = ref([]);
+const deposits = ref([])
+const withdrawals = ref([])
 
 const fetchFinance = async () => {
   try {
-    const jwtToken = localStorage.getItem("jwt_token");
-    if (!jwtToken) throw new Error("No token found");
+    const jwtToken = localStorage.getItem('jwt_token')
+    if (!jwtToken) throw new Error('No token found')
 
     const { data } = await axios.get(
-      "https://bladeware.masmut.dev/api/get-finance",
+      'https://bladeware.masmut.dev/api/get-finance',
       { headers: { Authorization: `Bearer ${jwtToken}` } }
-    );
+    )
 
-    if (data.status === "success") {
-      deposits.value = data.data.deposits || [];
-      withdrawals.value = data.data.withdrawals || [];
+    if (data.status === 'success') {
+      deposits.value = data.data.deposits || []
+      withdrawals.value = data.data.withdrawals || []
 
-      // ===== Inject "Welcome Bonus" ke Deposit tab =====
-      const wb = data?.data?.welcome_bonus;
-      const amount = Number(wb?.amount ?? 0);
+      // Inject Welcome Bonus ke Deposit
+      const wb = data?.data?.welcome_bonus
+      const amount = Number(wb?.amount ?? 0)
       if (amount > 0) {
-        // Item sintetis untuk ditampilkan di daftar Deposit
         deposits.value.unshift({
           id: null,
           created_at: wb?.last_awarded_at || new Date().toISOString(),
-          status: 1, // dianggap Completed
-          network_address: "-",
-          currency: "USDC",
-          wallet_address: "-",
+          status: 1,
+          network_address: '-',
+          currency: 'USDC',
+          wallet_address: '-',
           amount: amount,
-          category_deposit: "Welcome Bonus", // <- dipakai di template label
-        });
+          category_deposit: 'Welcome Bonus',
+        })
       }
-      // ================================================
-
-    } else if (data.message === "Transaction not found") {
-      deposits.value = [];
-      withdrawals.value = [];
+    } else if (data.message === 'Transaction not found') {
+      deposits.value = []
+      withdrawals.value = []
     } else {
-      showAlert(data.message || "Failed to load data", "error");
+      showAlert(data.message || 'Failed to load data', 'error')
     }
   } catch (error) {
-    const message = error?.response?.data?.message || error.message;
-    if (message !== "Transaction not found") {
-      showAlert(message, "error");
+    const message = error?.response?.data?.message || error.message
+    if (message !== 'Transaction not found') {
+      showAlert(message, 'error')
     }
   }
-};
+}
 
 // Computed untuk tab terpilih
 const filteredRecords = computed(() => {
-  return selectedTab.value === "Deposit" ? deposits.value : withdrawals.value;
-});
+  return selectedTab.value === 'Deposit' ? deposits.value : withdrawals.value
+})
 
 onMounted(() => {
-  fetchFinance();
-});
+  fetchFinance()
+})
 </script>
