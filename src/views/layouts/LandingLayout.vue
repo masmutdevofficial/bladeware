@@ -147,7 +147,7 @@
             <router-link
               v-else
               @click="closeMenu"
-              class="text-black font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
+              class="text-black mt-3 font-semibold text-lg cursor-pointer hover:text-[#ff961b] transition-transform duration-500"
               to="/login"
             >
               {{ $t("login-register") }}
