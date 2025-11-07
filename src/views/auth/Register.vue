@@ -9,7 +9,7 @@
 
     <!-- CARD -->
     <div
-      class="relative z-10 lg:bg-white h-max mt-[1px] py-15 px-5 lg:py-35 lg:px-20 rounded-lg shadow-lg flex flex-col items-center md:flex-row md:justify-between w-full lg:w-200 bg-opacity-90"
+      class="relative z-0 lg:bg-white h-max mt-[1px] py-15 px-5 lg:py-35 lg:px-20 rounded-lg shadow-lg flex flex-col items-center md:flex-row md:justify-between w-full lg:w-200 bg-opacity-90"
     >
       <div class="hidden lg:flex text-center md:text-left mb-8 md:mb-0">
         <img src="@/assets/img/logo.png" class="w-70" alt="" />
