@@ -260,8 +260,16 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import axios from "axios";
-import imgSrc from "@/assets/img/icon-all-bladeware.png";
 import defaultAvatar from "@/assets/img/tx1.png";
+// Boost carousel images (replacing previous single repeated image)
+import boost1 from "@/assets/img/boost-img-1.png";
+import boost2 from "@/assets/img/boost-img-2.png";
+import boost3 from "@/assets/img/boost-img-3.png";
+import boost4 from "@/assets/img/boost-img-4.png";
+import boost5 from "@/assets/img/boost-img-5.png";
+import boost6 from "@/assets/img/boost-img-6.png";
+import boost7 from "@/assets/img/boost-img-7.png";
+import boost8 from "@/assets/img/boost-img-8.png";
 
 const imgHeight = 250;
 const isAnimated = ref(true);
@@ -270,7 +278,8 @@ const maskProgress = ref(-1); // default -1 supaya gambar berwarna tidak muncul 
 let sliderTimeoutId = null;
 let maskIntervalId = null;
 const avatarUrl = ref(defaultAvatar);
-const images = [imgSrc, imgSrc];
+// Order matters for the vertical slider; keep array plain.
+const images = [boost1, boost2, boost3, boost4, boost5, boost6, boost7, boost8];
 
 function startMaskAnimation(cb) {
   maskProgress.value = 0;
