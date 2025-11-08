@@ -250,7 +250,7 @@ import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 
 // Tabs
-const tabs = ["All", "Successfully", "Pending"];
+const tabs = ["All", "Success", "Pending"];
 const selectedTab = ref("All");
 
 // Alert
@@ -386,7 +386,7 @@ const fetchRecords = async () => {
 // Filtering
 const filteredRecords = computed(() => {
   if (selectedTab.value === "All") return records.value;
-  if (selectedTab.value === "Successfully")
+  if (selectedTab.value === "Success")
     return records.value.filter((r) => r.status == 0);
   if (selectedTab.value === "Pending")
     return records.value.filter((r) => r.status != 0);

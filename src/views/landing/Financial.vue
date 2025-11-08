@@ -36,11 +36,8 @@
             :key="index"
             class="mb-4"
           >
-            <div
-              class="flex items-center justify-between text-sm text-gray-500"
-            >
+            <div class="flex items-center justify-between text-sm text-gray-500">
               <span>{{ record.created_at }}</span>
-
               <div class="flex flex-col items-end justify-end">
                 <div
                   class="font-semibold text-lg"
@@ -50,21 +47,21 @@
                     'text-red-500': record.status == 2,
                   }"
                 >
-                {{
-                  record.status == 0
-                    ? 'In Process'
-                    : record.status == 1
-                    ? 'Approved'
-                    : record.status == 2
-                    ? 'Rejected'
-                    : '-'
-                }}
+                  {{
+                    record.status == 0
+                      ? 'In Process'
+                      : record.status == 1
+                      ? 'Approved'
+                      : record.status == 2
+                      ? 'Rejected'
+                      : '-'
+                  }}
                 </div>
               </div>
             </div>
 
             <!-- CONTENT ROW -->
-            <!-- Deposit: tetap seperti semula -->
+            <!-- Deposit -->
             <div
               v-if="selectedTab === 'Deposit'"
               class="flex items-center justify-between"
@@ -74,11 +71,6 @@
               </span>
 
               <div class="flex flex-col items-center mt-2">
-                <div class="text-sm text-right text-gray-500">Currency</div>
-                <div class="font-semibold text-right">
-                  {{ record.currency || '-' }}
-                </div>
-
                 <div class="mt-2 text-sm text-right text-gray-500">Amount</div>
                 <div class="font-semibold text-right">
                   {{ formatAmount(record.amount) }}
@@ -86,11 +78,8 @@
               </div>
             </div>
 
-            <!-- Withdrawal: kiri (Network & Wallet), kanan (Currency & Amount) -->
-            <div
-              v-else
-              class="grid grid-cols-2 gap-4 items-start"
-            >
+            <!-- Withdrawal: kiri (Network & Wallet) | kanan (Currency & Amount) -->
+            <div v-else class="grid grid-cols-2 gap-4 items-start">
               <!-- Kiri -->
               <div class="flex flex-col">
                 <div class="text-sm text-gray-500">Network</div>
@@ -116,7 +105,7 @@
 
                 <div class="mt-2 text-sm text-right text-gray-500">Amount</div>
                 <div class="font-semibold text-right">
-                  {{ formatAmount(record.amount) }} {{ record.currency }}
+                  {{ formatAmount(record.amount) }}
                 </div>
               </div>
             </div>
@@ -148,9 +137,7 @@
         'bg-black/70 text-white',
       ]"
     >
-      <!-- SVG Ikon -->
       <div class="mb-3">
-        <!-- Success Icon -->
         <svg
           v-if="alert.type === 'success'"
           xmlns="http://www.w3.org/2000/svg"
@@ -164,7 +151,6 @@
             d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z"
           />
         </svg>
-        <!-- Error Icon -->
         <svg
           v-else
           xmlns="http://www.w3.org/2000/svg"
@@ -178,14 +164,11 @@
           stroke-linejoin="round"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M12 21a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9a9 9 0 0 0 -9 9a9 9 0 0 0 9 9z"
-          />
+          <path d="M12 21a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9a9 9 0 0 0 -9 9a9 9 0 0 0 9 9z"/>
           <path d="M9 8l6 8" />
           <path d="M15 8l-6 8" />
         </svg>
       </div>
-      <!-- Pesan Alert -->
       <p>{{ alert.message }}</p>
     </div>
   </div>
@@ -210,6 +193,12 @@ const showAlert = (message, type = 'error') => {
 const deposits = ref([])
 const withdrawals = ref([])
 
+const formatAmount = (value) => {
+  const num = Number(value)
+  if (Number.isNaN(num)) return value ?? '-'
+  return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
 const fetchFinance = async () => {
   try {
     const jwtToken = localStorage.getItem('jwt_token')
@@ -224,11 +213,14 @@ const fetchFinance = async () => {
       deposits.value = data.data.deposits || []
       withdrawals.value = data.data.withdrawals || []
 
-      // Inject Welcome Bonus ke Deposit
+      // Welcome Bonus harus MUNCUL DI BAWAH Deposit.
       const wb = data?.data?.welcome_bonus
       const amount = Number(wb?.amount ?? 0)
-      if (amount > 0) {
-        deposits.value.unshift({
+      const alreadyHasWB = deposits.value.some(d => d?.category_deposit === 'Welcome Bonus')
+
+      if (amount > 0 && !alreadyHasWB) {
+        // push -> item ada di paling bawah daftar Deposit
+        deposits.value.push({
           id: null,
           created_at: wb?.last_awarded_at || new Date().toISOString(),
           status: 1,
