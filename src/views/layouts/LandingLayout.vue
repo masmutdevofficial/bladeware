@@ -347,7 +347,7 @@ import { IconChevronDown } from "@tabler/icons-vue";
 import { IconX } from "@tabler/icons-vue";
 import whatsappImage from "@/assets/img/whatsapp.png"; // Import gambar
 import bannerNew from "@/assets/img/newcommerce.jpeg";
-import bannerLimited from "@/assets/img/limited-event.jpg";
+import bannerLimited from "@/assets/img/bladeware-limited-event.png";
 import { IconMenuDeep } from "@tabler/icons-vue"; // Import ikon dari Tabler
 import DaunJatuh from "@/components/DaunJatuh.vue";
 import { useAppSettingsStore } from "@/stores/appSettings";

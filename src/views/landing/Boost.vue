@@ -101,7 +101,7 @@
               v-if="priceAkhir > 0"
             >
               <p class="text-red-600 font-semibold text-sm">
-                Pending {{ formatAmount(minusSekarang) }} USDC
+                Pending {{ formatAmount(minusSekarang) }}
               </p>
             </div>
 
