@@ -1,6 +1,6 @@
 <template>
   <header
-    class="relative z-[1] lg:flex lg:justify-between lg:items-center px-[34px] h-[85px] py-4 bg-white"
+    class="relative z-[1] lg:flex lg:justify-between lg:items-center px-[34px] h-max py-4 bg-white"
   >
     <div class="font-bold flex flex-row justify-between">
       <router-link to="/" class="inline-block">
