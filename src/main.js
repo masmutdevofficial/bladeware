@@ -40,9 +40,9 @@ const head = createHead({
     {
       name: "twitter:image",
       content:
-        "#https://tes.zshot-ai.com/storage/logos/IrOJ3MujUdXDW9L3AF1ATniIqs8qRPXflCojP8Vy.png",
+        "#https://bladeware.masmutdevofficial.workers.dev/logo.png",
     },
-    { name: "twitter:site", content: "https://bladeware-vue.zshot-ai.com" },
+    { name: "twitter:site", content: "https://bladeware.masmutdevofficial.workers.dev" },
     { property: "og:title", content: "Bladeware Tech" },
     {
       property: "og:description",
@@ -52,17 +52,17 @@ const head = createHead({
     {
       property: "og:image",
       content:
-        "https://tes.zshot-ai.com/storage/logos/IrOJ3MujUdXDW9L3AF1ATniIqs8qRPXflCojP8Vy.png",
+        "https://bladeware.masmutdevofficial.workers.dev/logo.png",
     },
-    { property: "og:url", content: "https://bladeware-vue.zshot-ai.com" },
+    { property: "og:url", content: "https://bladeware.masmutdevofficial.workers.dev" },
     { property: "og:type", content: "website" },
   ],
   link: [
-    { rel: "canonical", href: "https://bladeware-vue.zshot-ai.com" }, // Ganti dengan URL default
+    { rel: "canonical", href: "https://bladeware.masmutdevofficial.workers.dev" }, // Ganti dengan URL default
     {
       rel: "icon",
       type: "image/png",
-      href: "https://tes.zshot-ai.com/storage/logos/IrOJ3MujUdXDW9L3AF1ATniIqs8qRPXflCojP8Vy.png",
+      href: "https://bladeware.masmutdevofficial.workers.dev/logo.png",
     }, // Favicon
   ],
 });
