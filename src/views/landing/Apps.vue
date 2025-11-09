@@ -49,7 +49,7 @@
             <!-- Combination Card -->
             <template v-if="group.type === 'combination'">
               <!-- Header status + timestamp sejajar seperti normal -->
-              <div class="flex items-center justify-between text-sm text-gray-500">
+              <div class="flex items-start justify-between text-sm text-gray-500">
                 <span>{{ group.groupDate }}</span>
                 <div class="flex flex-col justify-end items-end">
                   <div
