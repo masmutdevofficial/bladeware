@@ -50,7 +50,7 @@
             <template v-if="group.type === 'combination'">
               <!-- Header status + timestamp sejajar seperti normal -->
               <div class="flex items-center justify-between text-sm text-gray-500">
-                <span v-if="group.groupStatus === 0">{{ group.groupDate }}</span>
+                <span>{{ group.groupDate }}</span>
                 <div class="flex flex-col justify-end items-end">
                   <div
                     class="font-semibold"
