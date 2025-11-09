@@ -231,35 +231,38 @@
 
         <!-- WhatsApp row -->
         <div class="flex justify-around">
-          <div
-            class="text-center"
+          <a
             v-for="(service, index) in services"
             :key="'wa-' + index"
+            :href="service.href"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-center block hover:opacity-80 focus:outline-none focus:ring"
+            @click.stop
           >
-            <img
-              :src="service.image"
-              alt="Service Icon"
-              class="w-12 h-12 mx-auto mb-2"
-            />
-            <p class="text-sm">{{ service.name }}</p>
-          </div>
+            <img :src="service.image" alt="WhatsApp" class="w-12 h-12 mx-auto mb-2" />
+            <p class="text-sm font-semibold">{{ service.name }}</p>
+            <p v-if="service.display" class="text-xs text-gray-500">{{ service.display }}</p>
+          </a>
         </div>
 
         <!-- Telegram row (di bawahnya) -->
         <div class="flex justify-around mt-4">
-          <div
-            class="text-center"
+          <a
             v-for="(service, index) in servicesTelegram"
             :key="'tg-' + index"
+            :href="service.href"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-center block hover:opacity-80 focus:outline-none focus:ring"
+            @click.stop
           >
-            <img
-              :src="service.image"
-              alt="Service Icon"
-              class="w-12 h-12 mx-auto mb-2"
-            />
-            <p class="text-sm">{{ service.name }}</p>
-          </div>
+            <img :src="service.image" alt="Telegram" class="w-12 h-12 mx-auto mb-2" />
+            <p class="text-sm font-semibold">{{ service.name }}</p>
+            <p v-if="service.display" class="text-xs text-gray-500">{{ service.display }}</p>
+          </a>
         </div>
+
       </div>
     </div>
   <div
