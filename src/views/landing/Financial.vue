@@ -82,27 +82,10 @@
             <div v-else class="grid grid-cols-2 gap-4 items-start">
               <!-- Kiri -->
               <div class="flex flex-col">
-                <div class="text-sm text-gray-500">Network</div>
-                <div class="font-semibold">
-                  {{ record.network_address || '-' }}
-                </div>
-
-                <div class="mt-2 text-sm text-gray-500">Wallet Address</div>
-                <div
-                  class="font-mono text-xs break-all max-w-[16rem] lg:max-w-[22rem]"
-                  :title="record.wallet_address"
-                >
-                  {{ record.wallet_address || '-' }}
-                </div>
               </div>
 
               <!-- Kanan -->
               <div class="flex flex-col items-end">
-                <div class="text-sm text-right text-gray-500">Currency</div>
-                <div class="font-semibold text-right">
-                  {{ record.currency || '-' }}
-                </div>
-
                 <div class="mt-2 text-sm text-right text-gray-500">Amount</div>
                 <div class="font-semibold text-right">
                   {{ formatAmount(record.amount) }}

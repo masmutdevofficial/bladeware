@@ -534,17 +534,48 @@ const toggleCalendar = () => {
   showCalendar.value = !showCalendar.value;
 };
 
-    const services = ref([
-      { name: "WhatsApp", image: whatsappImage },
-      { name: "WhatsApp", image: whatsappImage },
-      { name: "WhatsApp", image: whatsappImage },
-    ]);
+// script setup
+const services = ref([
+  {
+    name: "WhatsApp",
+    image: whatsappImage,
+    display: "+1 (814) 622-7843 — Americas",
+    href: "https://wa.me/18146227843",
+  },
+  {
+    name: "WhatsApp",
+    image: whatsappImage,
+    display: "+61 480 838 105 — Asia Pacific",
+    href: "https://wa.me/61480838105",
+  },
+  {
+    name: "WhatsApp",
+    image: whatsappImage,
+    display: "+33 6 02 81 95 37 — EMEA",
+    href: "https://wa.me/33602819537",
+  },
+]);
 
-    const servicesTelegram = ref([
-      { name: "Telegram", image: telegramImage },
-      { name: "Telegram", image: telegramImage },
-      { name: "Telegram", image: telegramImage },
-    ]);
+const servicesTelegram = ref([
+  {
+    name: "Telegram",
+    image: telegramImage,
+    display: "@CustomerSupport_TheAmericas",
+    href: "https://t.me/CustomerSupport_TheAmericas",
+  },
+  {
+    name: "Telegram",
+    image: telegramImage,
+    display: "@CustomerSupport_AsiaPacific",
+    href: "https://t.me/CustomerSupport_AsiaPacific",
+  },
+  {
+    name: "Telegram",
+    image: telegramImage,
+    display: "@CustomerSupport_EMEA",
+    href: "https://t.me/CustomerSupport_EMEA",
+  },
+]);
 
 // Fungsi untuk menutup menu saat backdrop diklik
 const closeMenu = () => {
