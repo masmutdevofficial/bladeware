@@ -283,7 +283,7 @@ export default {
       try {
         const ip_address = await getIpAddress();
         const { data } = await axios.post(
-          "https://bladeware.masmut.dev/api/login",
+          "https://backend.bladewaretech.com/api/login",
           {
             phone_email: username.value,
             password: loginPassword.value,
