@@ -87,31 +87,17 @@
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-                />
-                <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                />
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
               </svg>
               <span>{{ isLoading ? "Connecting to Your Workbench" : "Login" }}</span>
             </button>
           </div>
 
-
           <div class="text-end">
             <span class="text-sm text-gray-500">
               No account?
-              <router-link class="text-sm text-[#ff961b]" to="register">
-                Register now
-              </router-link>
+              <router-link class="text-sm text-[#ff961b]" to="register">Register now</router-link>
             </span>
           </div>
         </div>
@@ -119,50 +105,14 @@
     </div>
 
     <!-- Alert Modal -->
-    <div
-      v-if="alert.message"
-      class="fixed inset-0 flex items-center justify-center bg-black/30 z-50"
-    >
-      <div
-        :class="[
-          'p-4 rounded-lg flex flex-col justify-center items-center text-center w-[300px]',
-          'bg-black/70 text-white',
-        ]"
-      >
+    <div v-if="alert.message" class="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
+      <div class="p-4 rounded-lg flex flex-col justify-center items-center text-center w-[300px] bg-black/70 text-white">
         <div class="mb-3">
-          <svg
-            v-if="alert.type === 'success'"
-            xmlns="http://www.w3.org/2000/svg"
-            width="50"
-            height="50"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            class="icon icon-tabler icons-tabler-filled icon-tabler-circle-check"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path
-              d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z"
-            />
+          <svg v-if="alert.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.83 -.94Z"/>
           </svg>
-          <svg
-            v-else
-            xmlns="http://www.w3.org/2000/svg"
-            width="50"
-            height="50"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-xbox-x"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path
-              d="M12 21a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9a9 9 0 0 0 -9 9a9 9 0 0 0 9 9z"
-            />
-            <path d="M9 8l6 8" />
-            <path d="M15 8l-6 8" />
+          <svg v-else xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="9"/><path d="M9 8l6 8"/><path d="M15 8l-6 8"/>
           </svg>
         </div>
         <p>{{ alert.message }}</p>
@@ -170,49 +120,22 @@
     </div>
 
     <!-- Customer Service Modal -->
-    <div
-      v-if="showModal"
-      class="fixed z-90 inset-0 flex items-start justify-center pt-20"
-      style="background: rgba(0, 0, 0, 0.8)"
-      @click="closeModal"
-    >
+    <div v-if="showModal" class="fixed z-90 inset-0 flex items-start justify-center pt-20" style="background: rgba(0, 0, 0, 0.8)" @click="closeModal">
       <div class="bg-white p-6 w-80" @click.stop>
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-lg font-bold">Customer Service Center</h2>
-          <button @click="closeModal" class="text-orange-500 text-xl">
-            <IconX class="cursor-pointer" />
-          </button>
+          <button @click="closeModal" class="text-orange-500 text-xl"><IconX class="cursor-pointer" /></button>
         </div>
 
-        <!-- WhatsApp row -->
         <div class="flex justify-around">
-          <div
-            class="text-center"
-            v-for="(service, index) in services"
-            :key="'wa-' + index"
-          >
-            <img
-              :src="service.image"
-              alt="Service Icon"
-              class="w-12 h-12 mx-auto mb-2"
-            />
-            <p class="text-sm">{{ service.name }}</p>
+          <div class="text-center" v-for="(service, index) in services" :key="'wa-' + index">
+            <img :src="service.image" alt="Service Icon" class="w-12 h-12 mx-auto mb-2"/><p class="text-sm">{{ service.name }}</p>
           </div>
         </div>
 
-        <!-- Telegram row (di bawahnya) -->
         <div class="flex justify-around mt-4">
-          <div
-            class="text-center"
-            v-for="(service, index) in servicesTelegram"
-            :key="'tg-' + index"
-          >
-            <img
-              :src="service.image"
-              alt="Service Icon"
-              class="w-12 h-12 mx-auto mb-2"
-            />
-            <p class="text-sm">{{ service.name }}</p>
+          <div class="text-center" v-for="(service, index) in servicesTelegram" :key="'tg-' + index">
+            <img :src="service.image" alt="Service Icon" class="w-12 h-12 mx-auto mb-2"/><p class="text-sm">{{ service.name }}</p>
           </div>
         </div>
       </div>
@@ -234,7 +157,7 @@ export default {
     const username = ref("");
     const loginPassword = ref("");
     const showLoginPassword = ref(false);
-    const isLoading = ref(false); // <-- tambahkan
+    const isLoading = ref(false);
     const router = useRouter();
 
     const alert = ref({ message: "", type: "success" });
@@ -258,37 +181,22 @@ export default {
       { name: "Telegram", image: telegramImage },
     ]);
 
-    const getIpAddress = async () => {
-      try {
-        const res = await axios.get("https://api.myip.com");
-        return res.data.ip;
-      } catch {
-        try {
-          const res = await axios.get("https://ipinfo.io/json");
-          return res.data.ip;
-        } catch {
-          return null;
-        }
-      }
-    };
-
     const login = async () => {
       if (!username.value || !loginPassword.value) {
         showAlert("Username and password cannot be empty.", "error");
         return;
       }
-      if (isLoading.value) return; // cegah double submit
+      if (isLoading.value) return;
       isLoading.value = true;
 
       try {
-        const ip_address = await getIpAddress();
         const { data } = await axios.post(
           "https://backend.bladewaretech.com/api/login",
           {
             phone_email: username.value,
             password: loginPassword.value,
-            ip_address,
-          }
+          },
+          { withCredentials: false }
         );
 
         const token = data.token;
@@ -296,19 +204,14 @@ export default {
           localStorage.setItem("jwt_token", token);
           sessionStorage.setItem("just_logged_in", "1");
           showAlert("Login successful!", "success");
-          setTimeout(() => {
-            router.push("/profile");
-          }, 1000);
+          setTimeout(() => router.push("/profile"), 1000);
         } else {
           showAlert("Token not received. Login failed.", "error");
         }
       } catch (error) {
-        showAlert(
-          error.response?.data?.message || "Login failed. Please try again.",
-          "error"
-        );
+        showAlert(error.response?.data?.message || "Login failed. Please try again.", "error");
       } finally {
-        isLoading.value = false; // matikan spinner
+        isLoading.value = false;
       }
     };
 
@@ -316,7 +219,7 @@ export default {
       username,
       loginPassword,
       showLoginPassword,
-      isLoading,         // <-- expose ke template
+      isLoading,
       login,
       alert,
       showAlert,
@@ -328,5 +231,4 @@ export default {
     };
   },
 };
-
 </script>
