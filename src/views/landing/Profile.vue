@@ -1045,8 +1045,35 @@ const bindWallet = async () => {
 
 
 const requestWithdrawal = async () => {
-  if (!wdWallet.value || !wdPassword.value || !amount.value) {
+  // Normalisasi nilai
+  const pwdRaw = (wdPassword.value || '').trim();
+  const amtNum  = Number(amount.value);
+  const hasPwd  = pwdRaw.length > 0;
+  const hasAmt  = amount.value !== '' && !Number.isNaN(amtNum);
+
+  // 1) Wallet belum ter-bind
+  if (!wdWallet.value || !walletAddress.value) {
     showAlert("Bind Your Wallet First !");
+    return;
+  }
+
+  // 2) Pesan sesuai kondisi yang kamu minta
+  if (!hasAmt && !hasPwd) {
+    showAlert("Incomplete Information!");
+    return;
+  }
+  if (hasAmt && !hasPwd) {
+    showAlert("Withdrawal Password Required!");
+    return;
+  }
+  if (!hasAmt && hasPwd) {
+    showAlert("Withdrawal Amount Required!");
+    return;
+  }
+
+  // (opsional) validasi tambahan
+  if (amtNum <= 0) {
+    showAlert("Amount must be greater than 0!");
     return;
   }
 
@@ -1058,8 +1085,8 @@ const requestWithdrawal = async () => {
       wallet_address: walletAddress.value,
       network: selectedNetwork.value,
       currency: selectedCurrency.value,
-      withdrawal_password: wdPassword.value,
-      amount: amount.value,
+      withdrawal_password: pwdRaw,
+      amount: amtNum,
     };
 
     const { data } = await axios.post(
@@ -1082,13 +1109,14 @@ const requestWithdrawal = async () => {
   } catch (error) {
     const errorMessage =
       error.response?.data?.message ||
-      error.response?.data?.error || // Tambahan ini
+      error.response?.data?.error ||
       error.message ||
       "Unknown error";
     console.error("Withdrawal Request error:", errorMessage);
     showAlert(`Error Withdrawal: ${errorMessage}`, "error");
   }
 };
+
 
 const updateLoginPassword = async () => {
   if (
