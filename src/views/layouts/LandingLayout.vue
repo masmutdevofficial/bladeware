@@ -555,7 +555,7 @@ const services = ref([
     name: "WhatsApp",
     image: whatsappImage,
     display: "+33 6 02 81 95 37 — EMEA",
-    href: "https://wa.me/33602819537",
+    href: "https://wa.me/17168722468",
   },
 ]);
 
