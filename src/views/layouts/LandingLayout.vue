@@ -259,7 +259,7 @@
           >
             <img :src="service.image" alt="Telegram" class="w-12 h-12 mx-auto mb-2" />
             <p class="text-sm font-semibold">{{ service.name }}</p>
-            <!-- <p v-if="service.display" class="text-xs text-gray-500">{{ service.display }}</p> -->
+            <p v-if="service.display" class="text-xs text-gray-500">{{ service.display }}</p> 
           </a>
         </div> -->
 
