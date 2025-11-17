@@ -247,7 +247,7 @@
         </div>
 
         <!-- Telegram row (di bawahnya) -->
-        <div class="flex justify-around mt-4">
+        <!-- <div class="flex justify-around mt-4">
           <a
             v-for="(service, index) in servicesTelegram"
             :key="'tg-' + index"
@@ -261,7 +261,7 @@
             <p class="text-sm font-semibold">{{ service.name }}</p>
             <!-- <p v-if="service.display" class="text-xs text-gray-500">{{ service.display }}</p> -->
           </a>
-        </div>
+        </div> -->
 
       </div>
     </div>
