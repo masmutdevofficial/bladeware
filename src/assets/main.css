@@ -2,5 +2,5 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Inline USDC icon used across landing views */
-.usdc-inline { display: inline-flex; align-items: center; gap: 0.25rem; }
+.usdc-inline { display: inline-flex; align-items: center; gap: 0.25rem; margin-top:3px; }
 .usdc-inline img.usdc-icon { width: 1em; height: 1em; object-fit: contain; display: inline-block; }
