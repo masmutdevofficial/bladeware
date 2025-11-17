@@ -31,8 +31,8 @@
         <ul class="list-disc list-inside text-black">
           <li class="mb-2">Maximum 40 application data for a set</li>
           <li class="mb-2">Profit per application 0.5%</li>
-          <li class="mb-2">Minimum requirement of 100 USDC to be activated</li>
-          <li>Current membership maximum withdrawal 5000 USDC</li>
+          <li class="mb-2">Minimum requirement of 100 <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span> to be activated</li>
+          <li>Current membership maximum withdrawal 5000 <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span></li>
         </ul>
       </div>
 
@@ -56,8 +56,8 @@
         <ul class="list-disc list-inside text-black">
           <li class="mb-2">Maximum 50 application data for a set</li>
           <li class="mb-2">Profit per application 0.6%</li>
-          <li class="mb-2">1500 USDC for purchasing and upgrading permanent Gold Membership</li>
-          <li>Current membership maximum withdrawal 50000 USDC</li>
+          <li class="mb-2">1500 <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span> for purchasing and upgrading permanent Gold Membership</li>
+          <li>Current membership maximum withdrawal 50000 <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span></li>
         </ul>
       </div>
 
@@ -81,8 +81,8 @@
         <ul class="list-disc list-inside text-black">
           <li class="mb-2">Maximum 55 application data for a set</li>
           <li class="mb-2">Profit per application 0.8%</li>
-          <li class="mb-2">5000 USDC for purchasing and upgrading permanent Platinum Membership</li>
-          <li>Current membership maximum withdrawal 200000 USDC</li>
+          <li class="mb-2">5000 <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span> for purchasing and upgrading permanent Platinum Membership</li>
+          <li>Current membership maximum withdrawal 200000 <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span></li>
         </ul>
       </div>
 
@@ -106,8 +106,8 @@
         <ul class="list-disc list-inside text-black">
           <li class="mb-2">Maximum 55 application data for a set</li>
           <li class="mb-2">Profit per application 1%</li>
-          <li class="mb-2">10000 USDC for purchasing and upgrading permanent Crown Membership</li>
-          <li>Current membership maximum withdrawal 1000000 USDC</li>
+          <li class="mb-2">10000 <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span> for purchasing and upgrading permanent Crown Membership</li>
+          <li>Current membership maximum withdrawal 1000000 <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span></li>
         </ul>
       </div>
     </div>

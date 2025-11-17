@@ -96,11 +96,11 @@
                   <div class="flex justify-between mt-2 text-sm">
                     <div>
                       <div class="text-gray-500">Unit Price</div>
-                      <div class="font-semibold">{{ record.total }} USDC</div>
+                      <div class="font-semibold">{{ record.total }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span></div>
                     </div>
                     <div>
                       <div class="text-gray-500">Profit</div>
-                      <div class="font-semibold">{{ record.profit }} USDC</div>
+                      <div class="font-semibold">{{ record.profit }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span></div>
                     </div>
                   </div>
                 </div>
@@ -168,11 +168,11 @@
               <div class="flex justify-between mt-2 text-sm">
                 <div>
                   <div class="text-gray-500">Unit Price</div>
-                  <div class="font-semibold">{{ group.total }} USDC</div>
+                  <div class="font-semibold">{{ group.total }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span></div>
                 </div>
                 <div>
                   <div class="text-gray-500">Profit</div>
-                  <div class="font-semibold">{{ group.profit }} USDC</div>
+                  <div class="font-semibold">{{ group.profit }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span></div>
                 </div>
               </div>
             </template>

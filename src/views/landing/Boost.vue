@@ -67,7 +67,7 @@
                 :class="windowWidth <= 380 ? 'text-[15px]' : ''"
                 style="word-break: break-all"
               >
-                {{ formatAmount(balance) }} USDC
+                {{ formatAmount(balance) }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span>
               </p>
             </div>
             <div class="flex flex-col items-center min-w-0">
@@ -77,7 +77,7 @@
                 :class="windowWidth <= 380 ? 'text-[15px]' : ''"
                 style="word-break: break-all"
               >
-                {{ formatAmount(todaysProfit) }} USDC
+                {{ formatAmount(todaysProfit) }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span>
               </p>
             </div>
           </div>
@@ -213,12 +213,12 @@
               <div>
                 <p class="text-orange-500 font-semibold">Unit Price</p>
                 <p class="text-lg">
-                  {{ formatAmount(produkData.price) }} USDC
+                  {{ formatAmount(produkData.price) }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span>
                 </p>
               </div>
               <div>
                 <p class="text-orange-500 font-semibold">Profit</p>
-                <p class="text-lg">{{ formatAmount(produkData.profit) }} USDC</p>
+                <p class="text-lg">{{ formatAmount(produkData.profit) }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span></p>
               </div>
             </div>
             <button

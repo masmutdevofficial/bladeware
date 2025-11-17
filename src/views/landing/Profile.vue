@@ -67,13 +67,13 @@
         <div class="flex justify-around items-center mb-4 mt-4" v-if="infoUser">
           <div class="text-center flex flex-col justify-center items-center">
             <p class="text-orange-500">Total Balance</p>
-            <p class="text-gray-700">{{ formatAmount(infoUser.saldo) }} USDC</p>
+            <p class="text-gray-700">{{ formatAmount(infoUser.saldo) }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span></p>
           </div>
           <hr class="bg-gray-300 w-[1px] h-[30px]" />
           <div class="text-center flex flex-col justify-center items-center">
             <p class="text-orange-500">Total Profit</p>
             <p class="text-gray-700">
-              {{ formatAmount(infoUser.saldo_misi) }} USDC
+              {{ formatAmount(infoUser.saldo_misi) }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span>
             </p>
           </div>
         </div>
