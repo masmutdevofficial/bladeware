@@ -797,11 +797,11 @@ const retypeWdPassword = ref("");
 const showNetworkDropdown = ref(false);
 const showCurrencyDropdown = ref(false);
 
-const selectedNetwork = ref(null);
-const selectedCurrency = ref(null);
+const selectedNetwork = ref("TRC20");
+const selectedCurrency = ref("USDT");
 
-const networks = ["ERC-20", "SOL", "Polygon", "BTC"];
-const currencies = ["Paypal USD", "USDC", "ETH", "BTC"];
+const networks = ["TRC20", "ERC-20", "SOL", "Polygon", "BTC"];
+const currencies = ["USDT", "Paypal USD", "USDC", "ETH", "BTC"];
 
 const isWalletBound = ref(false);
 
