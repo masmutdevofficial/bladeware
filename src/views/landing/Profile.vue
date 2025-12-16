@@ -969,8 +969,9 @@ const getBindWalletData = async () => {
     if (data.status === "success" && data.data) {
       const walletData = data.data.user;
       walletAddress.value = walletData.wallet_address || "";
-      selectedNetwork.value = walletData.network_address || "";
-      selectedCurrency.value = walletData.currency || "";
+      // Preserve defaults unless API provides a real value
+      selectedNetwork.value = walletData.network_address || selectedNetwork.value;
+      selectedCurrency.value = walletData.currency || selectedCurrency.value;
       wdWallet.value = walletData.wallet_address || "";
       if (
         walletAddress.value &&
