@@ -800,7 +800,7 @@ const showCurrencyDropdown = ref(false);
 const selectedNetwork = ref("TRC20");
 const selectedCurrency = ref("USDT");
 
-const networks = ["TRC20", "ERC-20", "SOL", "Polygon", "BTC"];
+const networks = ["TRC20","TRX", "ERC-20", "SOL", "Polygon", "BTC"];
 const currencies = ["USDT", "Paypal USD", "USDC", "ETH", "BTC"];
 
 const isWalletBound = ref(false);
