@@ -171,7 +171,7 @@
   class="border-b-[1px] border-b-gray-200 p-2 w-full rounded-md"
   :class="isWalletBound ? 'bg-gray-100 cursor-not-allowed' : ''"
   :disabled="isWalletBound"
-  :placeholder="selectedNetwork === 'TRC20' ? '' : 'Enter Your Wallet Address'"
+  placeholder="Enter Your Wallet Address"
 />
 
                 </div>
@@ -805,23 +805,7 @@ const currencies = ["USDT", "Paypal USD", "USDC", "ETH", "BTC"];
 
 const isWalletBound = ref(false);
 
-// Default wallet address for TRC20
-const DEFAULT_TRC20_WALLET = "TTbFQPsX5URU6NPoNubVexYbrj1kSHxVXZ";
-
-// Auto-fill wallet address when TRC20 is selected and not yet bound
-watch([selectedNetwork, isWalletBound], ([net, bound]) => {
-  if (bound) return;
-  if (net === "TRC20") {
-    if (!walletAddress.value) {
-      walletAddress.value = DEFAULT_TRC20_WALLET;
-    }
-  } else {
-    // Clear default when switching away from TRC20 (only if default was applied)
-    if (walletAddress.value === DEFAULT_TRC20_WALLET) {
-      walletAddress.value = "";
-    }
-  }
-}, { immediate: true });
+// Removed auto-fill logic for TRC20 wallet address
 
 const showAvatarModal = ref(false);
 const selectedFile = ref(null);
