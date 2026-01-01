@@ -73,7 +73,7 @@
           <div class="text-center flex flex-col justify-center items-center">
             <p class="text-orange-500">Total Profit</p>
             <p class="text-gray-700">
-              {{ formatAmount(infoUser.saldo_misi) }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span>
+              {{ formatAmount(totalProfit) }} <span class="usdc-inline"><img src="@/assets/img/usdc-icon.png" alt="USDC" class="usdc-icon"/></span>
             </p>
           </div>
         </div>
@@ -780,6 +780,12 @@ const canBind = computed(() =>
   !!selectedNetwork.value &&
   !!selectedCurrency.value
 );
+
+const totalProfit = computed(() => {
+  const saldoMisi = Number(infoUser.value?.saldo_misi ?? 0);
+  const komisi = Number(infoUser.value?.komisi ?? 0);
+  return saldoMisi + komisi;
+});
 
 const walletAddress = ref("");
 const wdWallet = ref("");
