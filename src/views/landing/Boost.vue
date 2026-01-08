@@ -398,7 +398,7 @@ const fetchFinanceBoost = async () => {
       if (tempBalance.value <= 0) {
         minusSekarang.value = balance.value - priceAkhir.value; // 1000 - 0
       } else {
-        minusSekarang.value = tempBalance.value - priceAkhir.value; // 1500 - 200
+        minusSekarang.value = balance.value; // 1500 - 200
       }
 
       if (totalFrozen.value > 0) {
