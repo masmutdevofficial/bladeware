@@ -247,7 +247,7 @@
         </div>
 
         <!-- Telegram row (di bawahnya) -->
-        <!-- <div class="flex justify-around mt-4">
+        <div class="flex justify-around mt-4">
           <a
             v-for="(service, index) in servicesTelegram"
             :key="'tg-' + index"
@@ -261,7 +261,7 @@
             <p class="text-sm font-semibold">{{ service.name }}</p>
             <p v-if="service.display" class="text-xs text-gray-500">{{ service.display }}</p> 
           </a>
-        </div> -->
+        </div>
 
       </div>
     </div>
@@ -542,19 +542,19 @@ const services = ref([
   {
     name: "WhatsApp",
     image: whatsappImage,
-    display: "+1 (814) 622-7843 — Americas",
-    href: "https://wa.me/18146227843",
+    display: "+1 224 618 0943 — Americas",
+    href: "https://wa.me/12246180943",
   },
   {
     name: "WhatsApp",
     image: whatsappImage,
-    display: "+61 480 838 105 — Asia Pacific",
-    href: "https://wa.me/61480838105",
+    display: "+1 609 934 7337 — Asia Pacific",
+    href: "https://wa.me/16099347337",
   },
   {
     name: "WhatsApp",
     image: whatsappImage,
-    display: "+33 6 02 81 95 37 — EMEA",
+    display: "+1 650 285 8946 — EMEA",
     href: "https://wa.me/16502858946",
   },
 ]);
@@ -563,20 +563,20 @@ const servicesTelegram = ref([
   {
     name: "Telegram",
     image: telegramImage,
-    display: "@CustomerSupport_TheAmericas",
-    href: "https://t.me/CustomerSupport_TheAmericas",
+    display: "@RegionalCS",
+    href: "https://t.me/RegionalCS",
   },
   {
     name: "Telegram",
     image: telegramImage,
-    display: "@CustomerSupport_AsiaPacific",
-    href: "https://t.me/CustomerSupport_AsiaPacific",
+    display: "@Regional_CS",
+    href: "https://t.me/Regional_CS",
   },
   {
     name: "Telegram",
     image: telegramImage,
-    display: "@CustomerSupport_EMEA",
-    href: "https://t.me/CustomerSupport_EMEA",
+    display: "@CS_Regional",
+    href: "https://t.me/CS_Regional",
   },
 ]);
 
