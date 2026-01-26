@@ -191,7 +191,7 @@ export default {
 
       try {
         const { data } = await axios.post(
-          "https://tech.bladewaretech.com/api/login",
+          "https://backend.bladewaretech.com/api/login",
           {
             phone_email: username.value,
             password: loginPassword.value,

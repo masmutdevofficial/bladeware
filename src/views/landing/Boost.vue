@@ -196,7 +196,7 @@
               <img
                 :src="
                   produkData.product_image
-                    ? 'https://tech.bladewaretech.com/uploads/products/' +
+                    ? 'https://backend.bladewaretech.com/uploads/products/' +
                       produkData.product_image
                     : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
                 "
@@ -374,7 +374,7 @@ const fetchFinanceBoost = async () => {
   try {
     const token = localStorage.getItem("jwt_token");
     const res = await axios.get(
-      "https://tech.bladewaretech.com/api/finance-boost",
+      "https://backend.bladewaretech.com/api/finance-boost",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -423,7 +423,7 @@ const submitProduk = async () => {
     const { id, price, profit } = produkData.value;
 
     const res = await axios.post(
-      "https://tech.bladewaretech.com/api/submit-produk",
+      "https://backend.bladewaretech.com/api/submit-produk",
       {
         id_products: id,
         price,
@@ -470,7 +470,7 @@ const toggleProduk = async () => {
     try {
       const token = localStorage.getItem("jwt_token");
       const res = await axios.get(
-        "https://tech.bladewaretech.com/api/get-produk",
+        "https://backend.bladewaretech.com/api/get-produk",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -502,7 +502,7 @@ const fetchProfileData = async () => {
     if (!token) throw new Error("Token not found");
 
     const { data } = await axios.get(
-      "https://tech.bladewaretech.com/api/get-data-boost",
+      "https://backend.bladewaretech.com/api/get-data-boost",
       { headers: { Authorization: `${token}` } }
     );
 
@@ -523,7 +523,7 @@ const fetchProfileData = async () => {
       } else if (fromProfilePath) {
         // pastikan mengarah ke /storage/...
         const clean = String(fromProfilePath).replace(/^\/+/, "");
-        avatarUrl.value = `https://tech.bladewaretech.com/storage/${clean.replace(/^storage\//, "")}`;
+        avatarUrl.value = `https://backend.bladewaretech.com/storage/${clean.replace(/^storage\//, "")}`;
       } else {
         avatarUrl.value = defaultAvatar;
       }
