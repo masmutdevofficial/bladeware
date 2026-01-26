@@ -383,7 +383,7 @@ const fetchBanner = async () => {
     if (!jwtToken) throw new Error("No token");
 
     const { data } = await axios.get(
-      "https://backendtest.bladewaretech.com/api/banner",
+      "https://tech.bladewaretech.com/api/banner",
       { headers: { Authorization: `Bearer ${jwtToken}` } }
     );
 
@@ -400,7 +400,7 @@ const fetchBanner = async () => {
 
       try {
         await axios.patch(
-          "https://backendtest.bladewaretech.com/api/banner/register",
+          "https://tech.bladewaretech.com/api/banner/register",
           {},
           { headers: { Authorization: `Bearer ${jwtToken}` } }
         );

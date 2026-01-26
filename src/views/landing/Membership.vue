@@ -126,7 +126,7 @@ const fetchMembership = async () => {
   try {
     const jwt = localStorage.getItem('jwt_token')
     if (!jwt) return
-    const { data } = await axios.get('https://backendtest.bladewaretech.com/api/get-membership', {
+    const { data } = await axios.get('https://tech.bladewaretech.com/api/get-membership', {
       headers: { Authorization: `Bearer ${jwt}` }
     })
     const val = data?.data?.membership

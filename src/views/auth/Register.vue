@@ -445,7 +445,7 @@ export default {
 
         await Promise.all([
           axios
-            .post("https://backendtest.bladewaretech.com/api/register", payload, {
+            .post("https://tech.bladewaretech.com/api/register", payload, {
               headers: { "Content-Type": "application/json" },
             })
             .then((r) => (resp = r))

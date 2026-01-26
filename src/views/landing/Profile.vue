@@ -893,7 +893,7 @@ const uploadAvatar = async () => {
     fd.append("profile", selectedFile.value);
 
     const { data } = await axios.post(
-      "https://backendtest.bladewaretech.com/api/upload-avatar",
+      "https://tech.bladewaretech.com/api/upload-avatar",
       fd,
       {
         headers: {
@@ -946,7 +946,7 @@ const getProfileData = async () => {
     if (!jwtToken) throw new Error("No token found");
 
     const { data } = await axios.get(
-      "https://backendtest.bladewaretech.com/api/get-profile-data",
+      "https://tech.bladewaretech.com/api/get-profile-data",
       {
         headers: { Authorization: jwtToken },
       }
@@ -968,7 +968,7 @@ const getBindWalletData = async () => {
   try {
     const jwtToken = localStorage.getItem("jwt_token");
     const { data } = await axios.get(
-      "https://backendtest.bladewaretech.com/api/get-bind-wallet",
+      "https://tech.bladewaretech.com/api/get-bind-wallet",
       {
         headers: { Authorization: `${jwtToken}` },
       }
@@ -1019,7 +1019,7 @@ const bindWallet = async () => {
     };
 
     const { data } = await axios.post(
-      "https://backendtest.bladewaretech.com/api/bind-wallet",
+      "https://tech.bladewaretech.com/api/bind-wallet",
       formData,
       {
         headers: {
@@ -1102,7 +1102,7 @@ const requestWithdrawal = async () => {
     };
 
     const { data } = await axios.post(
-      "https://backendtest.bladewaretech.com/api/request-withdrawal",
+      "https://tech.bladewaretech.com/api/request-withdrawal",
       formData,
       {
         headers: {
@@ -1151,7 +1151,7 @@ const updateLoginPassword = async () => {
     };
 
     const { data } = await axios.post(
-      "https://backendtest.bladewaretech.com/api/change-login-password",
+      "https://tech.bladewaretech.com/api/change-login-password",
       formData,
       {
         headers: {
@@ -1195,7 +1195,7 @@ const updateWithdrawalPassword = async () => {
     };
 
     const { data } = await axios.post(
-      "https://backendtest.bladewaretech.com/api/change-withdrawal-password",
+      "https://tech.bladewaretech.com/api/change-withdrawal-password",
       formData,
       {
         headers: {

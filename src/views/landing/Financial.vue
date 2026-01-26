@@ -188,7 +188,7 @@ const fetchFinance = async () => {
     if (!jwtToken) throw new Error('No token found')
 
     const { data } = await axios.get(
-      'https://backendtest.bladewaretech.com/api/get-finance',
+      'https://tech.bladewaretech.com/api/get-finance',
       { headers: { Authorization: `Bearer ${jwtToken}` } }
     )
 
