@@ -82,7 +82,7 @@
                       height="40"
                       :src="
                         record.logo
-                          ? 'https://backend.bladewaretech.com/uploads/products/' + record.logo
+                          ? 'https://backendtest.bladewaretech.com/uploads/products/' + record.logo
                           : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
                       "
                       width="40"
@@ -155,7 +155,7 @@
                   height="40"
                   :src="
                     group.logo
-                      ? 'https://backend.bladewaretech.com/uploads/products/' + group.logo
+                      ? 'https://backendtest.bladewaretech.com/uploads/products/' + group.logo
                       : 'https://storage.googleapis.com/a1aa/image/LWI_Pco9HSAUPXM-ksLR8TY20UASo0LEXcBuNZy9Ja4.jpg'
                   "
                   width="40"
@@ -270,7 +270,7 @@ const fetchDataBoost = async () => {
     if (!jwtToken) throw new Error("No token found");
 
     const { data } = await axios.get(
-      "https://backend.bladewaretech.com/api/get-data-boost-apps",
+      "https://backendtest.bladewaretech.com/api/get-data-boost-apps",
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       }
@@ -302,7 +302,7 @@ const submitProdukPending = async () => {
     const { id_products, total: price, profit } = pendingRecord;
 
     const res = await axios.post(
-      "https://backend.bladewaretech.com/api/submit-produk",
+      "https://backendtest.bladewaretech.com/api/submit-produk",
       {
         id_products: id_products,
         price,
@@ -349,7 +349,7 @@ const fetchRecords = async () => {
     if (!jwtToken) throw new Error("No token found");
 
     const { data } = await axios.get(
-      "https://backend.bladewaretech.com/api/get-apps-records",
+      "https://backendtest.bladewaretech.com/api/get-apps-records",
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       }
