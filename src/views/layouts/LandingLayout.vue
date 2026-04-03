@@ -542,8 +542,8 @@ const services = ref([
   {
     name: "WhatsApp",
     image: whatsappImage,
-    display: "+1 224 618 0943 — Americas",
-    href: "https://wa.me/12246180943",
+    display: "+1 229 485 9636 — Americas",
+    href: "https://wa.me/+12294859636",
   },
   {
     name: "WhatsApp",
